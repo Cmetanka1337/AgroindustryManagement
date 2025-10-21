@@ -53,3 +53,17 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 *.cache
+
+# JetBrains Rider specific
+.idea/
+*.sln.iml
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.csproj.user
+
+# Visual Studio Code
+.vscode/
