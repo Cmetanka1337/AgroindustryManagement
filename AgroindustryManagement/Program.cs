@@ -1,1 +1,3 @@
-﻿Console.WriteLine("Hello, World!");
+﻿using AgroindustryManagement.Services.Database;
+
+using var db = new AGDatabaseContext();

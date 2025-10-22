@@ -1,4 +1,4 @@
-namespace AgroindustryManagement.Services;
+namespace AgroindustryManagement.Services.Database;
 
 public interface IAGDatabaseService
 {
