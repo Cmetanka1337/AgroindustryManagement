@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AgroindustryManagement.Models;
     
     namespace AgroindustryManagement.Views;

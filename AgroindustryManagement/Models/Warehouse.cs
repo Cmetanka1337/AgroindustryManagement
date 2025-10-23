@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace AgroindustryManagement.Models;
 
 public class Warehouse
