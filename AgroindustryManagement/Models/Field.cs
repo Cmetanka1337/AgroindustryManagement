@@ -19,19 +19,3 @@ public class Field
     public DateTime CreatedAt { get; set; }
     
 }
-
-public enum CultureType
-{
-    Wheat,
-    Corn,
-    Soybean,
-    Rice,
-    Cotton
-}
-
-public enum  FieldStatus 
-{
-    Planted,
-    Harvested,
-    Fallow
-}

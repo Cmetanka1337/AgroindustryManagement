@@ -2,6 +2,10 @@ namespace AgroindustryManagement.Models;
 
 public class WorkerTask
 {
+    public WorkerTask(string description)
+    {
+        Description = description;
+    }
 
     public int Id { get; set; }
     public string Description { get; set; }
@@ -14,11 +18,3 @@ public class WorkerTask
     
 }
 
-public enum TaskType
-{
-    Planting,
-    Harvesting,
-    Irrigation,
-    Fertilization,
-    PestControl
-}

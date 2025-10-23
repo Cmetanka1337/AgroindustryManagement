@@ -8,11 +8,3 @@ public class Machine
     public int? AssignedToField { get; set; }
 }
 
-public enum MachineType
-{
-    Tractor,
-    Harvester,
-    Plow,
-    Seeder,
-    Sprayer
-}
