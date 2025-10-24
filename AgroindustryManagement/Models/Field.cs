@@ -11,14 +11,17 @@ public class Field
         Machines = machines;
         Tasks = tasks;
     }
+    public Field()
+    { 
+    }
 
     public int Id { get; set; }
     public double Area { get; set; }
     public CultureType Culture { get; set; }
     public FieldStatus Status { get; set; }
-    public List<Worker> Workers { get; set; }
-    public List<Machine> Machines { get; set; }
-    public List<WorkerTask> Tasks { get; set; }
+    public List<Worker> Workers { get; set; } = [];
+    public List<Machine> Machines { get; set; } = [];
+    public List<WorkerTask> Tasks { get; set; } = [];
     public DateTime CreatedAt { get; set; }
     
 }
