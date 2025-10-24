@@ -6,29 +6,89 @@ namespace AgroindustryManagement.Services.Database;
 
 public class AGDatabaseService: IAGDatabaseService
 {
+    private readonly AGDatabaseContext _context;
+    public AGDatabaseService(AGDatabaseContext context)
+    {
+        _context = context;
+    }
     public Field GetFieldById(int fieldId)
     {
-        throw new NotImplementedException();
+        if (fieldId <= 0)
+        {
+            throw new ArgumentException("Field ID must be a positive integer.", nameof(fieldId));
+        }
+        var field = _context.Fields.FirstOrDefault(f => f.Id == fieldId);
+
+        if (field == null)
+        {
+            throw new KeyNotFoundException($"Field with ID {fieldId} not found.");
+        }
+
+        return field;
     }
 
     public IEnumerable<Field> GetAllFields()
     {
-        throw new NotImplementedException();
+        var fields = _context.Fields.ToList();
+
+        if (fields.Count == 0)
+        {
+            return Enumerable.Empty<Field>();
+        }
+
+        return fields;
     }
 
     public void AddField(Field field)
     {
-        throw new NotImplementedException();
+        if (field == null)
+        {
+            throw new ArgumentNullException(nameof(field), "Field cannot be null.");
+        }
+
+        _context.Fields.Add(field);
+        _context.SaveChanges();
     }
 
     public void UpdateField(Field field)
     {
-        throw new NotImplementedException();
+        if (field == null)
+        {
+            throw new ArgumentNullException(nameof(field), "Field cannot be null.");
+        }
+
+        var existingField = _context.Fields.FirstOrDefault(f => f.Id == field.Id);
+
+        if (existingField == null)
+        {
+            throw new KeyNotFoundException($"Field with ID {field.Id} not found.");
+        }
+        existingField.Culture = field.Culture;
+        existingField.Area = field.Area;
+        existingField.Status = field.Status;
+        existingField.Workers = field.Workers;
+        existingField.Machines = field.Machines;
+        existingField.Tasks = field.Tasks;
+
+        _context.SaveChanges();
     }
 
     public void DeleteField(int fieldId)
     {
-        throw new NotImplementedException();
+        if(fieldId <= 0)
+        {
+            throw new ArgumentException("Field ID must be a positive integer.", nameof(fieldId));
+        }
+
+        var field = _context.Fields.FirstOrDefault(f => f.Id == fieldId);
+
+        if (field == null)
+        {
+            throw new KeyNotFoundException($"Field with ID {fieldId} not found.");
+        }
+
+        _context.Fields.Remove(field);
+        _context.SaveChanges();
     }
 
     public Worker GetWorkerById(int workerId)
