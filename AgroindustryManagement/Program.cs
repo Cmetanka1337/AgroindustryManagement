@@ -1,3 +1,4 @@
-﻿using AgroindustryManagement.Services.Database;
+﻿using AgroindustryManagement.Services.App;
 
-using var db = new AGDatabaseContext();
+var runLoop = new AGRunLoop();
+runLoop.Start();
