@@ -13,6 +13,7 @@ public class AGMenu
     public void DisplayMainMenuOptions()
     {
         Console.WriteLine("=== Agroindustry Management System ===");
+        Console.WriteLine("1. Show Field");
         Console.WriteLine("0. Exit");
         Console.Write("Select an option: ");
     }
@@ -22,16 +23,4 @@ public class AGMenu
         var selectedOption = int.Parse(Console.ReadLine() ?? string.Empty);
         OptionSelected.Invoke(selectedOption);
     }
-    
-    private int GetMenuOptionValue(MainMenuOptions option)
-    {
-        return (int)option;
-    }
-}
-
-enum MainMenuOptions
-{
-    Exit = 0
-    
-    
 }

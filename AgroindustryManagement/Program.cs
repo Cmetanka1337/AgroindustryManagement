@@ -1,4 +1,4 @@
 ﻿using AgroindustryManagement.Services.App;
 
-var runLoop = new AGRunLoop();
+var runLoop = new AGApplication();
 runLoop.Start();
