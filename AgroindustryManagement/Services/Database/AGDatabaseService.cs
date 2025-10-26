@@ -4,7 +4,7 @@ using AgroindustryManagement.Models;
 
 namespace AgroindustryManagement.Services.Database;
 
-public class AGDatabaseService: IAGDatabaseService
+public class AGDatabaseService : IAGDatabaseService
 {
     private readonly AGDatabaseContext _context;
     public AGDatabaseService(AGDatabaseContext context)
@@ -75,7 +75,7 @@ public class AGDatabaseService: IAGDatabaseService
 
     public void DeleteField(int fieldId)
     {
-        if(fieldId <= 0)
+        if (fieldId <= 0)
         {
             throw new ArgumentException("Field ID must be a positive integer.", nameof(fieldId));
         }
@@ -190,7 +190,21 @@ public class AGDatabaseService: IAGDatabaseService
     {
         throw new NotImplementedException();
     }
+    public Resource GetResourceByCultureType(CultureType cultureType)
+    {
+        if (!Enum.IsDefined(typeof(CultureType), cultureType))
+        {
+            throw new ArgumentException("Invalid culture type.", nameof(cultureType));
+        }
+        var resource = _context.Resources
+            .FirstOrDefault(r => r.CultureType == cultureType);
 
+        if (resource == null)
+        {
+            throw new KeyNotFoundException($"Resource for culture type {cultureType} not found.");
+        }
+        return resource;
+    }
     public IEnumerable<InventoryItem> GetCriticalInventoryItems()
     {
         throw new NotImplementedException();

@@ -5,10 +5,10 @@ namespace AgroindustryManagement.Services.Calculations;
 
 public class AGCalculationService : IAGCalculationService
 {
-    private readonly AGDatabaseContext _dbContext;
-    public AGCalculationService(AGDatabaseContext dbContext)
+    private readonly IAGDatabaseService _databaseService;
+    public AGCalculationService(IAGDatabaseService databaseService)
     {
-        _dbContext = dbContext;
+        _databaseService = databaseService;
     }
     public double CalculateSeedAmount(string cropType, double areaInHectares)
     {
@@ -20,8 +20,10 @@ public class AGCalculationService : IAGCalculationService
         {
             throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
-        var resource = _dbContext.Resources
-            .FirstOrDefault(r => r.CultureType.ToString().Equals(cropType, StringComparison.OrdinalIgnoreCase));
+
+        var culture = Enum.Parse<Models.CultureType>(cropType, true);
+
+        var resource = _databaseService.GetResourceByCultureType(culture);
 
         if (resource == null)
         {
@@ -51,8 +53,10 @@ public class AGCalculationService : IAGCalculationService
         {
             throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
-        var resource = _dbContext.Resources
-            .FirstOrDefault(r => r.CultureType.ToString().Equals(cropType, StringComparison.OrdinalIgnoreCase));
+
+        var culture = Enum.Parse<Models.CultureType>(cropType, true);
+
+        var resource = _databaseService.GetResourceByCultureType(culture);
 
         if (resource == null)
         {
@@ -77,8 +81,10 @@ public class AGCalculationService : IAGCalculationService
         {
             throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
-        var resource = _dbContext.Resources
-            .FirstOrDefault(r => r.CultureType.ToString().Equals(cropType, StringComparison.OrdinalIgnoreCase));
+
+        var culture = Enum.Parse<Models.CultureType>(cropType, true);
+
+        var resource = _databaseService.GetResourceByCultureType(culture);
 
         if (resource == null)
         {

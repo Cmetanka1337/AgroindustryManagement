@@ -175,7 +175,7 @@ public interface IAGDatabaseService
     void DeleteWorkerTask(int taskId);
     #endregion
     // Additional utility methods
-
+    Resource GetResourceByCultureType(CultureType cultureType);
     /// <summary>
     /// Retrieves inventory items that are critically low in stock.
     /// </summary>
