@@ -1,5 +1,6 @@
 using AgroindustryManagement.Views;
 using AgroindustryManagement.Models;
+using AgroindustryManagement.Services.App.Menu;
 using AgroindustryManagement.Services.Database;
 
 namespace AgroindustryManagement.Services.App;
@@ -8,6 +9,8 @@ public class AGApplication
 {
     private readonly AGMenu _menu = new ();
     private readonly AGViewService _viewService = new ();
+    private readonly AGDatabaseService _databaseService = new (context: Context);
+    private static readonly AGDatabaseContext Context = new (); // Temporarily located here. Should be moved later.
     private bool _isRunning;
     
     // TEMP VARIABLES
@@ -97,64 +100,34 @@ public class AGApplication
         _viewService.DisplayFieldDetails(field);
     }
     
-    private void OnOptionSelected(int option)
+    private void OnOptionSelected(string option)
     {
         switch (option)
         {
-            case (int)MainMenuOptions.DisplayField:
-                DisplayField();
+            case MenuOptions.MainOptions.FieldActions:
+                _menu.ChangeState(AGMenuState.FieldMenuState);
                 break;
-            case (int)MainMenuOptions.DisplayAllFields:
+            case MenuOptions.MainOptions.MachineActions:
+                _menu.ChangeState(AGMenuState.MachineMenuState);
                 break;
-            
-            case (int)MainMenuOptions.DisplayWorker:
+            case MenuOptions.MainOptions.InventoryItemActions:
+                _menu.ChangeState(AGMenuState.InventoryItemMenuState);
                 break;
-            case (int)MainMenuOptions.DisplayAllWorkers:
+            case MenuOptions.MainOptions.WorkerActions:
+                _menu.ChangeState(AGMenuState.WorkerMenuState);
                 break;
-            
-            case (int)MainMenuOptions.DisplayMachine:
+            case MenuOptions.MainOptions.WorkerTaskActions:
+                _menu.ChangeState(AGMenuState.WorkerTaskMenuState);
                 break;
-            case (int)MainMenuOptions.DisplayAllMachines:
-                break;
-            
-            case (int)MainMenuOptions.DisplayInventoryItem:
-                break;
-            case (int)MainMenuOptions.DisplayAllInventoryItems:
-                break;
-            
-            case (int)MainMenuOptions.DisplayWorkerTask:
-                break;
-            case (int)MainMenuOptions.DisplayAllWorkerTasks:
-                break;
-            
-            case (int)MainMenuOptions.Exit:
+            case MenuOptions.MainOptions.Exit:
                 Stop();
                 break;
         }
     }
-}
-
-enum MainMenuOptions
-{
-    // FIELD
-    DisplayField = 1,
-    DisplayAllFields = 2,
     
-    // WORKER
-    DisplayWorker = 3,
-    DisplayAllWorkers = 4,
+    // TODO: create separate methods for each state option handling
     
-    // MACHINE
-    DisplayMachine = 5,
-    DisplayAllMachines = 6,
+    // DATABASE METHODS
     
-    // INVENTORY ITEMS
-    DisplayInventoryItem = 7,
-    DisplayAllInventoryItems = 8,
     
-    // WORKER TASKS
-    DisplayWorkerTask = 9,
-    DisplayAllWorkerTasks = 10,
-    
-    Exit = 0
 }
