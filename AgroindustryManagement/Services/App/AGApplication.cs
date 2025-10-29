@@ -1,6 +1,7 @@
 using AgroindustryManagement.Views;
 using AgroindustryManagement.Models;
 using AgroindustryManagement.Services.App.Menu;
+using AgroindustryManagement.Services.App.Menu.MenuStateHandlers;
 using AgroindustryManagement.Services.Database;
 
 namespace AgroindustryManagement.Services.App;
@@ -12,6 +13,15 @@ public class AGApplication
     private readonly AGDatabaseService _databaseService = new (context: Context);
     private static readonly AGDatabaseContext Context = new (); // Temporarily located here. Should be moved later.
     private bool _isRunning;
+    private readonly Dictionary<string, IAGMenuStateHandler> _stateHandlers = new()
+    {
+        { AGMenuState.MainMenuState, new MainMenuStateHandler() },
+        { AGMenuState.FieldMenuState, new AGFieldMenuStateHandler() },
+        { AGMenuState.MachineMenuState, new AGMachineMenuStateHandler() },
+        { AGMenuState.InventoryItemMenuState, new AGInventoryItemMenuStateHandler() },
+        { AGMenuState.WorkerMenuState, new AGWorkerMenuStateHandler() },
+        { AGMenuState.WorkerTaskMenuState, new AGWorkerTaskMenuStateHandler() }
+    };
     
     // TEMP VARIABLES
     static Resource resource = new Resource
@@ -69,6 +79,11 @@ public class AGApplication
             EstimatesEndDate = default
         };
     
+    public void SetMenuState(string newState)
+    {
+        _menu.ChangeState(newState);
+    }    
+        
     public void Start()
     {
         _menu.OptionSelected += OnOptionSelected;
@@ -77,18 +92,26 @@ public class AGApplication
         _menu.DisplayWelcomeMessage();
         while (_isRunning)
         {
-            _menu.DisplayMainMenuOptions();
+            _menu.DisplayMenuOptions();
             _menu.StartSelectingPhase();
         }
     }
-
-    // PRIVATE METHODS
     
-    private void Stop()
+    public void Stop()
     {
         _isRunning = false;
     }
 
+    // PRIVATE METHODS
+    
+    private void OnOptionSelected(string option)
+    {
+        if (_stateHandlers.TryGetValue(_menu.CurrentState, out var handler))
+        {
+            handler.HandleOption(option, this);
+        }
+    }
+    
     private void DisplayField()
     {
         resource.RequiredMachines = [machine];
@@ -99,35 +122,4 @@ public class AGApplication
         
         _viewService.DisplayFieldDetails(field);
     }
-    
-    private void OnOptionSelected(string option)
-    {
-        switch (option)
-        {
-            case MenuOptions.MainOptions.FieldActions:
-                _menu.ChangeState(AGMenuState.FieldMenuState);
-                break;
-            case MenuOptions.MainOptions.MachineActions:
-                _menu.ChangeState(AGMenuState.MachineMenuState);
-                break;
-            case MenuOptions.MainOptions.InventoryItemActions:
-                _menu.ChangeState(AGMenuState.InventoryItemMenuState);
-                break;
-            case MenuOptions.MainOptions.WorkerActions:
-                _menu.ChangeState(AGMenuState.WorkerMenuState);
-                break;
-            case MenuOptions.MainOptions.WorkerTaskActions:
-                _menu.ChangeState(AGMenuState.WorkerTaskMenuState);
-                break;
-            case MenuOptions.MainOptions.Exit:
-                Stop();
-                break;
-        }
-    }
-    
-    // TODO: create separate methods for each state option handling
-    
-    // DATABASE METHODS
-    
-    
 }

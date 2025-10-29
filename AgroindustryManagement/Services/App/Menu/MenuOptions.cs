@@ -29,6 +29,7 @@ public static class MenuOptions
         public const string EditField = "EditField";
         public const string DeleteField = "DeleteField";
         public const string AddField = "AddField";
+        public const string Back = "Back";
         
         public static Dictionary<int, string> NumericMenuOptions { get; } = new()
         {
@@ -36,7 +37,8 @@ public static class MenuOptions
             { 2, DisplayAllFields },
             { 3, EditField },
             { 4, DeleteField },
-            { 5, AddField }
+            { 5, AddField },
+            { 0, Back }
         };
     }
 
@@ -47,6 +49,7 @@ public static class MenuOptions
         public const string EditWorker = "EditWorker";
         public const string DeleteWorker = "DeleteWorker";
         public const string AddWorker = "AddWorker";
+        public const string Back = "Back";
 
         public static Dictionary<int, string> NumericMenuOptions { get; } = new()
         {
@@ -54,7 +57,8 @@ public static class MenuOptions
             { 2, DisplayAllWorkers },
             { 3, EditWorker },
             { 4, DeleteWorker },
-            { 5, AddWorker }
+            { 5, AddWorker },
+            { 0, Back }
         };
     }
 
@@ -65,6 +69,7 @@ public static class MenuOptions
         public const string EditMachine = "EditMachine";
         public const string DeleteMachine = "DeleteMachine";
         public const string AddMachine = "AddMachine";
+        public const string Back = "Back";
 
         public static Dictionary<int, string> NumericMenuOptions { get; } = new()
         {
@@ -72,7 +77,8 @@ public static class MenuOptions
             { 2, DisplayAllMachines },
             { 3, EditMachine },
             { 4, DeleteMachine },
-            { 5, AddMachine }
+            { 5, AddMachine },
+            { 0, Back }
         };
     }
 
@@ -83,6 +89,7 @@ public static class MenuOptions
         public const string EditInventoryItem = "EditInventoryItem";
         public const string DeleteInventoryItem = "DeleteInventoryItem";
         public const string AddInventoryItem = "AddInventoryItem";
+        public const string Back = "Back";
 
         public static Dictionary<int, string> NumericMenuOptions { get; } = new()
         {
@@ -90,7 +97,8 @@ public static class MenuOptions
             { 2, DisplayAllInventoryItems },
             { 3, EditInventoryItem },
             { 4, DeleteInventoryItem },
-            { 5, AddInventoryItem }
+            { 5, AddInventoryItem },
+            { 0, Back }
         };
     }
 
@@ -101,6 +109,7 @@ public static class MenuOptions
         public const string EditWorkerTask = "EditWorkerTask";
         public const string DeleteWorkerTask = "DeleteWorkerTask";
         public const string AddWorkerTask = "AddWorkerTask";
+        public const string Back = "Back";
 
         public static Dictionary<int, string> NumericMenuOptions { get; } = new()
         {
@@ -108,15 +117,25 @@ public static class MenuOptions
             { 2, DisplayAllWorkerTasks },
             { 3, EditWorkerTask },
             { 4, DeleteWorkerTask },
-            { 5, AddWorkerTask }
+            { 5, AddWorkerTask },
+            { 0, Back }
         };
     }
 }
 
-public static class AGMenuOptionParser
+public static class AGMenuOptionHelper
 {
     public static string? GetOptionKey(Dictionary<int, string> options, int userInput)
     {
         return options.TryGetValue(userInput, out var optionKey) ? optionKey : null;
+    }
+    
+    public static string FormatOptionName(string option)
+    {
+        if (string.IsNullOrWhiteSpace(option))
+            return string.Empty;
+
+        return string.Concat(option.Select((ch, index) =>
+            index > 0 && char.IsUpper(ch) ? $" {ch}" : ch.ToString()));
     }
 }
