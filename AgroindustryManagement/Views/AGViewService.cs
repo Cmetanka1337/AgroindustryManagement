@@ -226,7 +226,7 @@ using AgroindustryManagement.Models;
             Console.WriteLine($"Worker ID:         {task.WorkerId}");
             Console.WriteLine($"Field ID:          {task.FieldId}");
             Console.WriteLine($"Task Type:         {task.TaskType}");
-            Console.WriteLine($"Progress:          {task.Progress / 100}%");
+            Console.WriteLine($"Progress:          {task.Progress}%");
             Console.WriteLine($"Start Date:        {task.StartDate:yyyy-MM-dd}");
             Console.WriteLine($"Estimated End Date:{task.EstimatesEndDate:yyyy-MM-dd}");
             Console.WriteLine("===================================");
