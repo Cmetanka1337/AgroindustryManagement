@@ -2,6 +2,13 @@ namespace AgroindustryManagement.Services.App.Menu.MenuStateHandlers;
 
 public class AGMachineMenuStateHandler: IAGMenuStateHandler
 {
+    public AGApplication App { get; }
+
+    
+    public AGMachineMenuStateHandler(AGApplication app)
+    {
+        App = app;
+    }
     public void HandleOption(string option, AGApplication app)
     {
         switch (option)
