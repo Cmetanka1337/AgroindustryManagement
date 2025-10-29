@@ -58,7 +58,7 @@ using AgroindustryManagement.Models;
             {
                 foreach (var task in field.Tasks)
                 {
-                    Console.WriteLine($"- {task.Description} (ID: {task.Id}, Status: {task.Progress / 100}%)");
+                    Console.WriteLine($"- {task.Description} (ID: {task.Id}, Status: {task.Progress}%)");
                 }
             }
             else
