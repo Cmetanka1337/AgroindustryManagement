@@ -82,7 +82,7 @@ public class AGMenu
     
     private void ShowGenericErrorMessage()
     {
-        Console.WriteLine("\n\nError occured! \nPlease, try again.\n\n");
+        Console.WriteLine("\n\nError occurred! \nPlease, try again.\n\n");
     }
     
     private Dictionary<int, string> GetCurrentStateOptions()
