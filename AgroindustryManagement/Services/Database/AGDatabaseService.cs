@@ -91,52 +91,141 @@ public class AGDatabaseService : IAGDatabaseService
 
     public Worker GetWorkerById(int workerId)
     {
-        throw new NotImplementedException();
+        if (workerId <= 0)
+        {
+            throw new ArgumentException("Invalid id", nameof(workerId));
+        }
+        var worker = _context.Workers.FirstOrDefault(f => f.Id == workerId);
+        if (worker == null)
+        {
+            throw new KeyNotFoundException("Worker with such id is not found");
+        }
+        return worker;
     }
 
     public IEnumerable<Worker> GetAllWorkers()
     {
-        throw new NotImplementedException();
+        var workers = new List<Worker>();
+        workers = _context.Workers.ToList();
+
+        if (workers.Count == 0)
+        {
+            return Enumerable.Empty<Worker>();
+        }
+
+        return workers;
     }
 
     public void AddWorker(Worker worker)
     {
-        throw new NotImplementedException();
+        if (worker == null)
+        {
+            throw new ArgumentException("Worker is null", nameof(worker));
+        }
+        _context.Workers.Add(worker);
+        _context.SaveChanges();
     }
 
     public void UpdateWorker(Worker worker)
     {
-        throw new NotImplementedException();
+        if (worker == null)
+        {
+            throw new ArgumentException("Worker is null", nameof(worker));
+        }
+        var workerExist = _context.Workers.FirstOrDefault(f => f.Id == worker.Id);
+        if (workerExist == null)
+        {
+            throw new KeyNotFoundException("Worker is not found");
+        }
+        workerExist.HoursWorked = worker.HoursWorked;
+        workerExist.HourlyRate = worker.HourlyRate;
+        workerExist.Age = worker.Age;
+        workerExist.IsActive = worker.IsActive;
+        workerExist.Tasks = worker.Tasks;
+        workerExist.FirstName = worker.FirstName;
+        workerExist.LastName = worker.LastName;
+        _context.SaveChanges();
     }
 
     public void DeleteWorker(int workerId)
     {
-        throw new NotImplementedException();
+        if (workerId <= 0)
+        {
+            throw new ArgumentException("Worker id must be positive", nameof(workerId));
+        }
+        var workerExist = _context.Workers.FirstOrDefault(f => f.Id == workerId);
+        if (workerExist == null)
+        {
+            throw new KeyNotFoundException("Such worker is not found");
+        }
+        _context.Workers.Remove(workerExist);
+        _context.SaveChanges();
     }
 
     public Machine GetMachineById(int machineId)
     {
-        throw new NotImplementedException();
+        if (machineId <= 0)
+        {
+            throw new ArgumentException("Id must be positive", nameof(machineId));
+        }
+        var machineExist = _context.Machines.FirstOrDefault(f => f.Id == machineId);
+        if (machineExist == null)
+        {
+            throw new KeyNotFoundException("Machine is not found");
+        }
+        return machineExist;
     }
 
     public IEnumerable<Machine> GetAllMachines()
     {
-        throw new NotImplementedException();
+        var machines = _context.Machines.ToList();
+        if (machines.Count == 0)
+        {
+            return Enumerable.Empty<Machine>();
+        }
+        return machines;
     }
-
     public void AddMachine(Machine machine)
     {
-        throw new NotImplementedException();
+        if(machine == null)
+        {
+            throw new ArgumentException("Machine is null", nameof(machine));
+        }
+        _context.Machines.Add(machine);
+        _context.SaveChanges();
     }
 
     public void UpdateMachine(Machine machine)
     {
-        throw new NotImplementedException();
+        if (machine == null)
+        {
+            throw new ArgumentException("Machine is null", nameof(machine));
+        }
+        var existMachine = _context.Machines.FirstOrDefault(m => m.Id == machine.Id);
+        if(existMachine == null)
+        { 
+            throw new KeyNotFoundException("Such machine is not found"); 
+        }
+        existMachine.AssignedToField = machine.AssignedToField;
+        existMachine.Field = machine.Field;
+        existMachine.Resource = machine.Resource;
+        existMachine.ResourceId = machine.ResourceId;
+        existMachine.IsAvailable=machine.IsAvailable;
+        existMachine.Type= machine.Type;
+        _context.SaveChanges();
     }
 
     public void DeleteMachine(int machineId)
     {
-        throw new NotImplementedException();
+        if (machineId <= 0)
+        {
+            throw new ArgumentException("Id must be positive", nameof(machineId));
+        }
+        var machine = _context.Machines.FirstOrDefault(m=>m.Id==machineId);
+        if (machine == null)
+        { throw new KeyNotFoundException("Such machine is not found"); }
+        _context.Machines.Remove(machine);
+        _context.SaveChanges();
     }
 
     public InventoryItem GetInventoryItemById(int itemId)
