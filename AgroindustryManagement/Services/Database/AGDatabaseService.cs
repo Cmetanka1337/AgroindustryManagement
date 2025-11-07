@@ -359,7 +359,7 @@ public class AGDatabaseService : IAGDatabaseService
         {
             throw new ArgumentException("ID must be positive", nameof(taskId));
         }
-        var task= _context.WorkerTasks.FirstOrDefault(t=>t.Id=taskId);
+        var task= _context.WorkerTasks.FirstOrDefault(t=>t.Id==taskId);
         if (task == null)
         {
             throw new KeyNotFoundException("There is no such task"); 
