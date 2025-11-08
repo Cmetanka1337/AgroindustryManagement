@@ -37,7 +37,7 @@ public interface IAGCalculationService
     /// <summary>
     /// Calculates the duration of work (in hours or days) for a specific area.
     /// </summary>
-    double EstimateWorkDuration(double areaInHectares, int workersCount, string machineryType);
+    double EstimateWorkDuration(double areaInHectares, int workersCount, string machineryType, string cropType);
 
     /// <summary>
     /// Calculates the worker's bonus for exceeding the plan.

@@ -1,3 +1,4 @@
+using AgroindustryManagement.Models;
 using AgroindustryManagement.Services.Database;
 using System;
 
@@ -54,7 +55,22 @@ public class AGCalculationService : IAGCalculationService
 
     public double EstimateYield(string cropType, double areaInHectares)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(cropType))
+        {
+            throw new ArgumentException("Crop type cannot be null or empty.", nameof(cropType));
+        }
+        if (areaInHectares <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+        }
+
+        var culture = Enum.Parse<Models.CultureType>(cropType, true);
+        var resource = _databaseService.GetResourceByCultureType(culture);
+        if(resource == null)
+        {
+            throw new InvalidOperationException($"No resource found for crop type: {cropType}");
+        }
+        return resource.Yield*areaInHectares;
     }
 
     public int CalculateRequiredMachineryCount(string cropType, double areaInHectares)
@@ -119,9 +135,27 @@ public class AGCalculationService : IAGCalculationService
         return (int)Math.Ceiling(resource.WorkerPerHectare * areaInHectares);
     }
 
-    public double EstimateWorkDuration(double areaInHectares, int workersCount, string machineryType)
+    public double EstimateWorkDuration(double areaInHectares, int workersCount, string machineryType, string cropType)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(cropType) || string.IsNullOrEmpty(machineryType))
+        {
+            throw new ArgumentException("Crop type and machine type cannot be null or empty.");
+        }
+        if (areaInHectares <= 0 || workersCount<=0)
+        { 
+            throw new ArgumentOutOfRangeException("Area in hectares and workers count must be greater than zero.");
+        }
+        var machine=Enum.Parse<Models.MachineType>(machineryType, true);
+        var culture=Enum.Parse<Models.CultureType>(cropType, true);
+        var resource=_databaseService.GetResourceByCultureType(culture);
+        var concreteMachine=_databaseService.GetMachineByMachineType(machine);
+        if(resource==null || concreteMachine==null)
+        {
+            throw new InvalidOperationException($"No resource or machine are found");
+        }
+        double duralityOfWorkerWork=(resource.WorkerWorkDuralityPerHectare/workersCount)*areaInHectares;
+        double duralityOfMachineWork=concreteMachine.WorkDuralityPerHectare*areaInHectares;
+        return duralityOfWorkerWork+duralityOfMachineWork;
     }
 
     public double CalculateBonus(double plannedArea, double actualArea, double baseSalary)

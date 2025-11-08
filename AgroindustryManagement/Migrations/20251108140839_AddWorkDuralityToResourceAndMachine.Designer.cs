@@ -3,6 +3,7 @@ using System;
 using AgroindustryManagement.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgroindustryManagement.Migrations
 {
     [DbContext(typeof(AGDatabaseContext))]
-    partial class AGDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20251108140839_AddWorkDuralityToResourceAndMachine")]
+    partial class AddWorkDuralityToResourceAndMachine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.21");
@@ -79,8 +82,8 @@ namespace AgroindustryManagement.Migrations
                     b.Property<int?>("FieldId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("FuelConsumption")
-                        .HasColumnType("REAL");
+                    b.Property<int>("FuelConsumption")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("INTEGER");

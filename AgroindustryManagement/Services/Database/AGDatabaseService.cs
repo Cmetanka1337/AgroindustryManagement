@@ -214,6 +214,7 @@ public class AGDatabaseService : IAGDatabaseService
         existMachine.IsAvailable=machine.IsAvailable;
         existMachine.Type= machine.Type;
         existMachine.FuelConsumption= machine.FuelConsumption;
+        existMachine.WorkDuralityPerHectare= machine.WorkDuralityPerHectare;
         _context.SaveChanges();
     }
 

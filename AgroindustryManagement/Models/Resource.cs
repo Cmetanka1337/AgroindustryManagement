@@ -17,5 +17,7 @@ public class Resource
     public double SeedPerHectare { get; set; }
     public double FertilizerPerHectare { get; set; }
     public double WorkerPerHectare { get; set; }
+    public double WorkerWorkDuralityPerHectare { get; set; }
+    public double Yield {  get; set; }
     public List<Machine> RequiredMachines { get; set; } = [];
 }

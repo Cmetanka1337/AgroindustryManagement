@@ -3,6 +3,7 @@ using System;
 using AgroindustryManagement.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgroindustryManagement.Migrations
 {
     [DbContext(typeof(AGDatabaseContext))]
-    partial class AGDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20251108132149_AddYieldToResource")]
+    partial class AddYieldToResource
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.21");
@@ -79,8 +82,8 @@ namespace AgroindustryManagement.Migrations
                     b.Property<int?>("FieldId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("FuelConsumption")
-                        .HasColumnType("REAL");
+                    b.Property<int>("FuelConsumption")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("INTEGER");
@@ -90,9 +93,6 @@ namespace AgroindustryManagement.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
-
-                    b.Property<double>("WorkDuralityPerHectare")
-                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 
@@ -119,9 +119,6 @@ namespace AgroindustryManagement.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<double>("WorkerPerHectare")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("WorkerWorkDuralityPerHectare")
                         .HasColumnType("REAL");
 
                     b.Property<double>("Yield")
