@@ -12,7 +12,7 @@ public interface IAGCalculationService
     /// <summary>
     /// Calculates the amount of fertilizers or plant protection products needed for the area.
     /// </summary>
-    double CalculateFertilizerAmount(string fertilizerType, double areaInHectares);
+    double CalculateFertilizerAmount(string cropType, double areaInHectares);
 
     /// <summary>
     /// Estimates the potential yield for a given area, depending on the crop and weather conditions.

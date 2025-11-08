@@ -33,9 +33,23 @@ public class AGCalculationService : IAGCalculationService
         return resource.SeedPerHectare * areaInHectares;
     }
     //TODO if we want this be implemented, we need to have fertilizer data in Resource model
-    public double CalculateFertilizerAmount(string fertilizerType, double areaInHectares)
+    public double CalculateFertilizerAmount(string cropType, double areaInHectares)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(cropType))
+        {
+            throw new ArgumentException("Crop type cannot be null or empty.", nameof(cropType));
+        }
+        if (areaInHectares <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+        }
+        var culture = Enum.Parse<Models.CultureType>(cropType, true);
+        var resource = _databaseService.GetResourceByCultureType(culture);
+        if (resource == null)
+        {
+            throw new InvalidOperationException($"No resource found for crop type: {cropType}");
+        }
+        return resource.FertilizerPerHectare*areaInHectares;
     }
 
     public double EstimateYield(string cropType, double areaInHectares)
@@ -68,7 +82,18 @@ public class AGCalculationService : IAGCalculationService
     //TODO if we want this be implemented, we need to have fuel consumption data in Machine model 
     public double EstimateFuelConsumption(string machineType, double areaInHectares)
     {
-        throw new NotImplementedException();
+        if(string.IsNullOrEmpty(machineType))
+        {
+            throw new ArgumentException(nameof(machineType), "Machine type cannot be null or empty.");
+        }
+        if (areaInHectares <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+        }
+        var machine=Enum.Parse<Models.MachineType>(machineType, true);
+        var concreteMachine=_databaseService.GetMachineByMachineType(machine);
+        return concreteMachine.FuelConsumption*areaInHectares;
+
     }
 
     public int CalculateRequiredWorkers(string cropType, double areaInHectares)

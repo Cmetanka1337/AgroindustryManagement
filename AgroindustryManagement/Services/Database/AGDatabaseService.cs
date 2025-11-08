@@ -1,4 +1,5 @@
 using AgroindustryManagement.Models;
+using System.Globalization;
 
 namespace AgroindustryManagement.Services.Database;
 
@@ -212,6 +213,7 @@ public class AGDatabaseService : IAGDatabaseService
         existMachine.ResourceId = machine.ResourceId;
         existMachine.IsAvailable=machine.IsAvailable;
         existMachine.Type= machine.Type;
+        existMachine.FuelConsumption= machine.FuelConsumption;
         _context.SaveChanges();
     }
 
@@ -382,6 +384,19 @@ public class AGDatabaseService : IAGDatabaseService
         }
         return resource;
     }
+    public Machine GetMachineByMachineType(MachineType machineType)
+    {
+        if(!Enum.IsDefined(typeof(MachineType), machineType))
+        {
+            throw new ArgumentException("Invalid machine type.", nameof(machineType));
+        }
+        var machine= _context.Machines.FirstOrDefault(m=>m.Type==machineType);
+        if(machine == null)
+        {
+            throw new KeyNotFoundException($"Machine for machine type {machineType} not found.");
+        }
+        return machine;
+    }
     public IEnumerable<InventoryItem> GetCriticalInventoryItems()
     {
         var items=_context.InventoryItems.ToList();
@@ -408,7 +423,7 @@ public class AGDatabaseService : IAGDatabaseService
         }
         var tasksById = _context.WorkerTasks.Where(i => i.WorkerId == workerId).ToList();
 
-        if (tasksById.Count == 0)//output some message in console?
+        if (tasksById.Count == 0)
         {
             return Enumerable.Empty<WorkerTask>();
         }
