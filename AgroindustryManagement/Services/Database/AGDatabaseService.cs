@@ -440,4 +440,5 @@ public class AGDatabaseService : IAGDatabaseService
         }
         return availableMachines;
     }
+
 }

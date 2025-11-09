@@ -158,9 +158,40 @@ public class AGCalculationService : IAGCalculationService
         return duralityOfWorkerWork+duralityOfMachineWork;
     }
 
-    public double CalculateBonus(double plannedArea, double actualArea, double baseSalary)
+    public decimal CalculateBonus(int workerId)
     {
-        throw new NotImplementedException();
+        if(workerId<=0)
+        { 
+            throw new ArgumentOutOfRangeException("Worker id must be greater than zero. "); 
+        }
+        var tasks = _databaseService.GetTasksByWorkerId(workerId);
+        decimal bonusPerDay = 0.02m;
+        decimal sumOfBonuses = 0;
+        decimal bonus;
+        foreach ( var task in tasks)
+        {
+            var differenceInDays=(task.EstimatesEndDate - task.RealEndDate).Days;
+            if (differenceInDays<=0)
+            {
+                bonus=0;
+            }
+            else
+            {
+                bonus=differenceInDays*bonusPerDay;
+            }
+            if(bonus>0.06m)
+                bonus=0.06m;
+            sumOfBonuses+=bonus;
+        }
+        var worker=_databaseService.GetWorkerById(workerId);
+        if(worker==null)
+        {
+            throw new InvalidOperationException("Worker with such Id is not found");
+        }
+        decimal salary;
+        salary=worker.HourlyRate*worker.HoursWorked;
+        decimal finalBonus = salary*sumOfBonuses;
+        return finalBonus;
     }
 
     public double CalculateWorkerEfficiency(double plannedWork, double completedWork, TimeSpan actualTime)

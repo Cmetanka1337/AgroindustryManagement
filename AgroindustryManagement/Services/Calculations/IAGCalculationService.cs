@@ -42,7 +42,7 @@ public interface IAGCalculationService
     /// <summary>
     /// Calculates the worker's bonus for exceeding the plan.
     /// </summary>
-    double CalculateBonus(double plannedArea, double actualArea, double baseSalary);
+    decimal CalculateBonus(int workerId);
 
     /// <summary>
     /// Calculates the worker's efficiency coefficient.

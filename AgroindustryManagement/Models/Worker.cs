@@ -23,7 +23,7 @@ public class Worker
     public decimal HourlyRate { get; set; }
     public bool IsActive { get; set; }
     public List<WorkerTask> Tasks { get; set; } = [];
-    public double HoursWorked { get; set; }
+    public decimal HoursWorked { get; set; }
     
     public List<WorkerTask> GetActiveTasks()
     {
