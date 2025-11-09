@@ -21,6 +21,7 @@ public class WorkerTask
     public TaskType TaskType { get; set; }
     public double Progress { get; set; }
     public DateTime StartDate { get; set; }
+    public DateTime RealEndDate { get; set; }
     public DateTime EstimatesEndDate { get; set; }
     
 }

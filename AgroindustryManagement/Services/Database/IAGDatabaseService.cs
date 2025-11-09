@@ -176,10 +176,12 @@ public interface IAGDatabaseService
     #endregion
     // Additional utility methods
     Resource GetResourceByCultureType(CultureType cultureType);
+    Machine GetMachineByMachineType(MachineType machineType);
     /// <summary>
     /// Retrieves inventory items that are critically low in stock.
     /// </summary>
     /// <returns>A collection of inventory items with low stock levels.</returns>
+    
     IEnumerable<InventoryItem> GetCriticalInventoryItems();
 
     /// <summary>
