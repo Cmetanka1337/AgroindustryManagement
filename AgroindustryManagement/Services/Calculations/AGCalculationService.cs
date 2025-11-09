@@ -18,7 +18,7 @@ public class AGCalculationService : IAGCalculationService
         }
         if (areaInHectares <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            throw new ArgumentException("Area in hectares must be greater than zero.");
         }
 
         var culture = Enum.Parse<Models.CultureType>(cropType, true);
@@ -30,7 +30,9 @@ public class AGCalculationService : IAGCalculationService
             throw new InvalidOperationException($"No resource found for crop type: {cropType}");
         }
 
-        return resource.SeedPerHectare * areaInHectares;
+        var seedAmount = resource.SeedPerHectare * areaInHectares;
+
+        return seedAmount;
     }
     //TODO if we want this be implemented, we need to have fertilizer data in Resource model
     public double CalculateFertilizerAmount(string fertilizerType, double areaInHectares)

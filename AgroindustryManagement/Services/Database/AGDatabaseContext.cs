@@ -11,9 +11,19 @@ public class AGDatabaseContext: DbContext
     public DbSet<WorkerTask> WorkerTasks { get; set; }
     public DbSet<Resource> Resources { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
+    public AGDatabaseContext()
+    {
+    }
+    public AGDatabaseContext(DbContextOptions<AGDatabaseContext> options)
+        : base(options)
+    {
+    }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=agroindustry_management.db");
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlite("Data Source=agroindustry_management.db");
+        }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
