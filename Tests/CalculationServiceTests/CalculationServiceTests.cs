@@ -343,10 +343,27 @@ namespace Tests.CalculationServiceTests
             };
             _databaseService.AddWorker(mockWorker);
             _databaseService.AddWorkerTask(mockWorkerTask);
-            _mockDBContext.SaveChanges();
+            
             var result = _calculationService.CalculateBonus(1);
             Assert.Equal(900, result);
         }
-        
+        [Fact]
+        public void Test_CalculateBonus_NegativeWorkerId_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => _calculationService.CalculateBonus(-5));
+            Assert.Throws<ArgumentException>(() => _calculationService.CalculateBonus(0));
+        }
+        [Fact]
+        public void Test_CalculateBonus_WorkerIdNotFound_ThrowsKeyNotFoundException()
+        {
+            var worker = new Worker
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe"
+            };
+            _databaseService.AddWorker(worker);
+            Assert.Throws<KeyNotFoundException>(() => _calculationService.CalculateBonus(3));
+        }
     }
 }
