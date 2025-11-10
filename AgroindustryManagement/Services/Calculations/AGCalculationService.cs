@@ -28,7 +28,7 @@ public class AGCalculationService : IAGCalculationService
 
         if (resource == null)
         {
-            throw new InvalidOperationException($"No resource found for crop type: {cropType}");
+            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
         }
 
         var seedAmount = resource.SeedPerHectare * areaInHectares;
@@ -44,13 +44,13 @@ public class AGCalculationService : IAGCalculationService
         }
         if (areaInHectares <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
         var culture = Enum.Parse<Models.CultureType>(cropType, true);
         var resource = _databaseService.GetResourceByCultureType(culture);
         if (resource == null)
         {
-            throw new InvalidOperationException($"No resource found for crop type: {cropType}");
+            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
         }
         return resource.FertilizerPerHectare*areaInHectares;
     }
@@ -63,14 +63,14 @@ public class AGCalculationService : IAGCalculationService
         }
         if (areaInHectares <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
 
         var culture = Enum.Parse<Models.CultureType>(cropType, true);
         var resource = _databaseService.GetResourceByCultureType(culture);
         if(resource == null)
         {
-            throw new InvalidOperationException($"No resource found for crop type: {cropType}");
+            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
         }
         return resource.Yield*areaInHectares;
     }
@@ -83,7 +83,7 @@ public class AGCalculationService : IAGCalculationService
         }
         if (areaInHectares <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
 
         var culture = Enum.Parse<Models.CultureType>(cropType, true);
@@ -92,7 +92,7 @@ public class AGCalculationService : IAGCalculationService
 
         if (resource == null)
         {
-            throw new InvalidOperationException($"No resource found for crop type: {cropType}");
+            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
         }
 
         return resource.RequiredMachines.Count;
@@ -106,10 +106,14 @@ public class AGCalculationService : IAGCalculationService
         }
         if (areaInHectares <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
         var machine=Enum.Parse<Models.MachineType>(machineType, true);
         var concreteMachine=_databaseService.GetMachineByMachineType(machine);
+        if(concreteMachine==null)
+        {
+            throw new KeyNotFoundException($"No machine found for machine type: {machineType}");
+        }
         return concreteMachine.FuelConsumption*areaInHectares;
 
     }
@@ -122,7 +126,7 @@ public class AGCalculationService : IAGCalculationService
         }
         if (areaInHectares <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
 
         var culture = Enum.Parse<Models.CultureType>(cropType, true);
@@ -131,7 +135,7 @@ public class AGCalculationService : IAGCalculationService
 
         if (resource == null)
         {
-            throw new InvalidOperationException($"No resource found for crop type: {cropType}");
+            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
         }
 
         return (int)Math.Ceiling(resource.WorkerPerHectare * areaInHectares);
@@ -145,53 +149,54 @@ public class AGCalculationService : IAGCalculationService
         }
         if (areaInHectares <= 0 || workersCount<=0)
         { 
-            throw new ArgumentOutOfRangeException("Area in hectares and workers count must be greater than zero.");
+            throw new ArgumentException("Area in hectares and workers count must be greater than zero.");
         }
         var machine=Enum.Parse<Models.MachineType>(machineryType, true);
         var culture=Enum.Parse<Models.CultureType>(cropType, true);
         var resource=_databaseService.GetResourceByCultureType(culture);
-        var concreteMachine=_databaseService.GetMachineByMachineType(machine);
-        if(resource==null || concreteMachine==null)
+        if (resource==null)
         {
-            throw new InvalidOperationException($"No resource or machine are found");
+            throw new KeyNotFoundException($"No resource are found");
+        }
+        var concreteMachine=_databaseService.GetMachineByMachineType(machine);
+       
+        if (concreteMachine==null)
+        {
+            throw new KeyNotFoundException($"No machine are found");
         }
         double duralityOfWorkerWork=(resource.WorkerWorkDuralityPerHectare/workersCount)*areaInHectares;
         double duralityOfMachineWork=concreteMachine.WorkDuralityPerHectare*areaInHectares;
-        return duralityOfWorkerWork+duralityOfMachineWork;
+        return Math.Max(duralityOfWorkerWork, duralityOfMachineWork);
     }
 
     public decimal CalculateBonus(int workerId)
     {
         if(workerId<=0)
         { 
-            throw new ArgumentOutOfRangeException("Worker id must be greater than zero. "); 
+            throw new ArgumentException("Worker id must be greater than zero. "); 
         }
+        var worker = _databaseService.GetWorkerById(workerId);
+        if (worker==null)
+        {
+            throw new KeyNotFoundException("Worker with such Id is not found");
+        }
+        decimal salary;
+        salary=worker.HourlyRate*worker.HoursWorked;
         var tasks = _databaseService.GetTasksByWorkerId(workerId);
         decimal bonusPerDay = 0.02m;
         decimal sumOfBonuses = 0;
         decimal bonus;
-        foreach ( var task in tasks)
+        foreach (var task in tasks)
         {
-            var differenceInDays=(task.EstimatesEndDate - task.RealEndDate).Days;
-            if (differenceInDays<=0)
-            {
-                bonus=0;
-            }
-            else
+            var differenceInDays = (task.EstimatesEndDate - task.RealEndDate).Days;
+            if (differenceInDays>0)
             {
                 bonus=differenceInDays*bonusPerDay;
+                if (bonus>0.06m)
+                    bonus=0.06m;
+                sumOfBonuses+=bonus;
             }
-            if(bonus>0.06m)
-                bonus=0.06m;
-            sumOfBonuses+=bonus;
         }
-        var worker=_databaseService.GetWorkerById(workerId);
-        if(worker==null)
-        {
-            throw new InvalidOperationException("Worker with such Id is not found");
-        }
-        decimal salary;
-        salary=worker.HourlyRate*worker.HoursWorked;
         decimal finalBonus = salary*sumOfBonuses;
         return finalBonus;
     }
