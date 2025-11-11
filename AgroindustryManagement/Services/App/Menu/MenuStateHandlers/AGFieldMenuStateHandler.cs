@@ -11,7 +11,62 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
     {
         App = app;
     }
+    // TEMP VARIABLES
+        static Resource resource = new Resource
+            {
+                Id = 0,
+                CultureType = CultureType.Wheat,
+                SeedPerHectare = 0,
+                WorkerPerHectare = 0,
+                RequiredMachines = null
+            };
+        static Machine machine = new Machine
+            {
+                Id = 0,
+                Type = MachineType.Tractor,
+                IsAvailable = false,
+                AssignedToField = null,
+                Field = null,
+                ResourceId = 0,
+                Resource = resource
+            };
+            static  Field field = new Field
+            {
+                Id = 0,
+                Area = 0,
+                Culture = CultureType.Wheat,
+                Status = FieldStatus.Planted,
+                Workers = null,
+                Machines = null,
+                Tasks = null,
+                CreatedAt = default
+            };
     
+            static Worker worker = new Worker
+            {
+                Id = 0,
+                FirstName = "name",
+                LastName = "surname",
+                Age = 0,
+                HourlyRate = 0,
+                IsActive = true,
+                Tasks = null,
+                HoursWorked = 0
+            };
+            static WorkerTask task = new WorkerTask
+            {
+                Id = 0,
+                Description = "description",
+                WorkerId = 0,
+                Worker = worker,
+                FieldId = 0,
+                Field = field,
+                TaskType = TaskType.Planting,
+                Progress = 0,
+                StartDate = default,
+                EstimatesEndDate = default
+            };
+
     public void HandleOption(string option, AGApplication app)
     {
         switch (option)
@@ -20,16 +75,12 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
                 DisplayField();
                 break;
             case MenuOptions.FieldOptions.DisplayAllFields:
-                DisplayAllFields();
                 break;
             case MenuOptions.FieldOptions.EditField:
-                EditField();
                 break;
             case MenuOptions.FieldOptions.DeleteField:
-                DeleteField();
                 break;
             case MenuOptions.FieldOptions.AddField:
-                AddField();
                 break;
             case MenuOptions.FieldOptions.Back:
                 app.SetMenuState(AGMenuState.MainMenuState);
@@ -39,33 +90,12 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayField()
     {
-        var fieldId = App.ViewService.GetIntegerUserInputWithMessage("Enter field Id");
-        var field = App.DatabaseService.GetFieldById(fieldId);
+        resource.RequiredMachines = [machine];
+        worker.Tasks = [task];
+        field.Workers = [worker];
+        field.Machines = [machine];
+        field.Tasks = [task];
+        
         App.ViewService.DisplayFieldDetails(field);
-    }
-
-    private void DisplayAllFields()
-    {
-        App.ViewService.DisplayAllFields(App.DatabaseService.GetAllFields());
-    }
-
-    private void AddField()
-    {
-        var newField = App.ViewService.GetFieldDataFromUser();
-        App.DatabaseService.AddField(newField);
-    }
-    
-    private void EditField()
-    {
-        var fieldId = App.ViewService.GetIntegerUserInputWithMessage("Enter field Id");
-
-        var updatedField = App.ViewService.GetFieldDataFromUser();
-        App.DatabaseService.UpdateField(updatedField);
-    }
-    
-    private void DeleteField()
-    {
-        var fieldId = App.ViewService.GetIntegerUserInputWithMessage("Enter field Id");
-        App.DatabaseService.DeleteField(fieldId);
     }
 }

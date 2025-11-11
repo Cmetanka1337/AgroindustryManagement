@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgroindustryManagement.Migrations
 {
     [DbContext(typeof(AGDatabaseContext))]
-    [Migration("20251110114954_Updates")]
-    partial class Updates
+    [Migration("20251108141041_ChangeTypeForFuelConsumption")]
+    partial class ChangeTypeForFuelConsumption
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.21");
 
             modelBuilder.Entity("AgroindustryManagement.Models.Field", b =>
                 {
@@ -162,8 +162,8 @@ namespace AgroindustryManagement.Migrations
                     b.Property<decimal>("HourlyRate")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("HoursWorked")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("HoursWorked")
+                        .HasColumnType("REAL");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
@@ -195,9 +195,6 @@ namespace AgroindustryManagement.Migrations
 
                     b.Property<double>("Progress")
                         .HasColumnType("REAL");
-
-                    b.Property<DateTime>("RealEndDate")
-                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");

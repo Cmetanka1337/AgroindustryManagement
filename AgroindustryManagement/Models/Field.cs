@@ -19,9 +19,9 @@ public class Field
     public double Area { get; set; }
     public CultureType Culture { get; set; }
     public FieldStatus Status { get; set; }
-    public List<Worker> Workers { get; set; } = new List<Worker>();
-    public List<Machine> Machines { get; set; } = new List<Machine>();
-    public List<WorkerTask> Tasks { get; set; } = new List<WorkerTask>();
-    public DateTime CreatedAt { get; init; }
+    public List<Worker> Workers { get; set; } = [];
+    public List<Machine> Machines { get; set; } = [];
+    public List<WorkerTask> Tasks { get; set; } = [];
+    public DateTime CreatedAt { get; set; }
     
 }

@@ -35,7 +35,7 @@ public class AGCalculationService : IAGCalculationService
 
         return seedAmount;
     }
-    
+    //TODO if we want this be implemented, we need to have fertilizer data in Resource model
     public double CalculateFertilizerAmount(string cropType, double areaInHectares)
     {
         if (string.IsNullOrEmpty(cropType))
@@ -97,7 +97,7 @@ public class AGCalculationService : IAGCalculationService
 
         return resource.RequiredMachines.Count;
     }
-     
+    //TODO if we want this be implemented, we need to have fuel consumption data in Machine model 
     public double EstimateFuelConsumption(string machineType, double areaInHectares)
     {
         if(string.IsNullOrEmpty(machineType))
@@ -147,17 +147,17 @@ public class AGCalculationService : IAGCalculationService
         { 
             throw new ArgumentOutOfRangeException("Area in hectares and workers count must be greater than zero.");
         }
-        var machine = Enum.Parse<Models.MachineType>(machineryType, true);
-        var culture = Enum.Parse<Models.CultureType>(cropType, true);
-        var resource = _databaseService.GetResourceByCultureType(culture);
-        var concreteMachine = _databaseService.GetMachineByMachineType(machine);
-        if(resource == null || concreteMachine==null)
+        var machine=Enum.Parse<Models.MachineType>(machineryType, true);
+        var culture=Enum.Parse<Models.CultureType>(cropType, true);
+        var resource=_databaseService.GetResourceByCultureType(culture);
+        var concreteMachine=_databaseService.GetMachineByMachineType(machine);
+        if(resource==null || concreteMachine==null)
         {
             throw new InvalidOperationException($"No resource or machine are found");
         }
-        double duralityOfWorkerWork = (resource.WorkerWorkDuralityPerHectare/workersCount)*areaInHectares;
-        double duralityOfMachineWork = concreteMachine.WorkDuralityPerHectare*areaInHectares;
-        return duralityOfWorkerWork + duralityOfMachineWork;
+        double duralityOfWorkerWork=(resource.WorkerWorkDuralityPerHectare/workersCount)*areaInHectares;
+        double duralityOfMachineWork=concreteMachine.WorkDuralityPerHectare*areaInHectares;
+        return duralityOfWorkerWork+duralityOfMachineWork;
     }
 
     public decimal CalculateBonus(int workerId)
@@ -196,18 +196,16 @@ public class AGCalculationService : IAGCalculationService
         return finalBonus;
     }
 
-    // UNIMPLEMENTED METHODS
-    
     public double CalculateWorkerEfficiency(double plannedWork, double completedWork, TimeSpan actualTime)
     {
         throw new NotImplementedException();
     }
-    
+    //TODO if we want this be implemented, we need to have cost data in Resource and Machine models
     public double CalculateFieldCost(string cropType, double areaInHectares)
     {
         throw new NotImplementedException();
     }
-    
+    //TODO if we want this be implemented, we need to have enumeration data for market prices
     public double EstimateProfit(string cropType, double areaInHectares, double marketPricePerTon)
     {
         throw new NotImplementedException();

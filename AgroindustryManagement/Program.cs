@@ -1,6 +1,4 @@
 ﻿using AgroindustryManagement.Services.App;
 
-var databaseContext = new AgroindustryManagement.Services.Database.AGDatabaseContext();
-var runLoop = new AGApplication(databaseContext);
-
+var runLoop = new AGApplication();
 runLoop.Start();

@@ -16,7 +16,6 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
             case MenuOptions.InventoryItemOptions.DisplayInventoryItem:
                 break;
             case MenuOptions.InventoryItemOptions.DisplayAllInventoryItems:
-                DisplayAllInventoryItems();
                 break;
             case MenuOptions.InventoryItemOptions.EditInventoryItem:
                 break;
@@ -28,10 +27,5 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
                 app.SetMenuState(AGMenuState.MainMenuState);
                 break;
         }
-    }
-    
-    private void DisplayAllInventoryItems()
-    {
-        App.ViewService.DisplayAllInventoryItems(App.DatabaseService.GetAllInventoryItems());
     }
 }
