@@ -1,5 +1,7 @@
 using AgroindustryManagement.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
 namespace AgroindustryManagement.Services.Database;
 
 public class AGDatabaseContext: DbContext

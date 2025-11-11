@@ -1,5 +1,4 @@
 using AgroindustryManagement.Views;
-using AgroindustryManagement.Models;
 using AgroindustryManagement.Services.App.Menu;
 using AgroindustryManagement.Services.App.Menu.MenuStateHandlers;
 using AgroindustryManagement.Services.Database;
@@ -10,13 +9,15 @@ public class AGApplication
 {
     private readonly AGMenu _menu = new ();
     public readonly AGViewService ViewService = new ();
-    private readonly AGDatabaseService _databaseService = new (context: Context);
-    private static readonly AGDatabaseContext Context = new (); // Temporarily located here. Should be moved later.
+    public readonly AGDatabaseService DatabaseService;
+    private static AGDatabaseContext _context;
     private bool _isRunning;
     private readonly Dictionary<string, IAGMenuStateHandler> _stateHandlers;
 
-    public AGApplication()
+    public AGApplication(AGDatabaseContext databaseContext)
     {
+        _context = databaseContext;
+        DatabaseService = new AGDatabaseService(context: _context);
         _stateHandlers = new Dictionary<string, IAGMenuStateHandler>
         {
             { AGMenuState.MainMenuState, new MainMenuStateHandler(this) },
