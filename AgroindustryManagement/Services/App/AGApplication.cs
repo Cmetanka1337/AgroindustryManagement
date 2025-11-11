@@ -10,14 +10,12 @@ public class AGApplication
     private readonly AGMenu _menu = new ();
     public readonly AGViewService ViewService = new ();
     public readonly AGDatabaseService DatabaseService;
-    private static AGDatabaseContext _context;
     private bool _isRunning;
     private readonly Dictionary<string, IAGMenuStateHandler> _stateHandlers;
 
-    public AGApplication(AGDatabaseContext databaseContext)
+    public AGApplication(AGDatabaseService dbService)
     {
-        _context = databaseContext;
-        DatabaseService = new AGDatabaseService(context: _context);
+        DatabaseService = dbService;
         _stateHandlers = new Dictionary<string, IAGMenuStateHandler>
         {
             { AGMenuState.MainMenuState, new MainMenuStateHandler(this) },
