@@ -323,7 +323,6 @@ public class AGDatabaseService : IAGDatabaseService
             throw new KeyNotFoundException("There is no such task");
         }
         
-        existingWorkerTask.StartDate = task.StartDate;
         existingWorkerTask.Worker = task.Worker;
         existingWorkerTask.WorkerId = task.WorkerId;
         existingWorkerTask.FieldId = task.FieldId;

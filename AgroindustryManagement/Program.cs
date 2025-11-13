@@ -4,6 +4,6 @@ using AgroindustryManagement.Services.Database;
 var databaseContext = new AGDatabaseContext();
 databaseContext.Database.EnsureCreated();
 var dbService = new AGDatabaseService(databaseContext);
-var runLoop = new AGApplication(dbService);
+var application = new AGApplication(dbService);
 
-runLoop.Start();
+application.Start();

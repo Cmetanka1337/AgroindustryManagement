@@ -51,16 +51,14 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
 
     private void AddField()
     {
-        var newField = App.ViewService.GetFieldDataFromUser();
-        App.DatabaseService.AddField(newField);
+        var field = App.DataCollector.CollectData<Field>();
+        field.CreatedAt = DateTime.Now;
+        App.DatabaseService.AddField(field);
     }
     
     private void EditField()
     {
-        var fieldId = App.ViewService.GetIntegerUserInputWithMessage("Enter field Id");
-
-        var updatedField = App.ViewService.GetFieldDataFromUser();
-        App.DatabaseService.UpdateField(updatedField);
+        
     }
     
     private void DeleteField()
