@@ -1,6 +1,7 @@
 using AgroindustryManagement.Views;
 using AgroindustryManagement.Services.App.Menu;
 using AgroindustryManagement.Services.App.Menu.MenuStateHandlers;
+using AgroindustryManagement.Services.Calculations;
 using AgroindustryManagement.Services.Database;
 using AgroindustryManagement.Services.Helpers;
 
@@ -11,6 +12,7 @@ public class AGApplication
     private readonly AGMenu _menu = new ();
     public readonly AGViewService ViewService = new ();
     public readonly AGDatabaseService DatabaseService;
+    public readonly AGCalculationService CalculationService;
     public readonly DataCollector DataCollector;
     private bool _isRunning;
     private readonly Dictionary<string, IAGMenuStateHandler> _stateHandlers;
@@ -19,6 +21,7 @@ public class AGApplication
     {
         DatabaseService = dbService;
         DataCollector = new DataCollector(dbService);
+        CalculationService = new AGCalculationService(dbService);
         _stateHandlers = new Dictionary<string, IAGMenuStateHandler>
         {
             { AGMenuState.MainMenuState, new MainMenuStateHandler(this) },
