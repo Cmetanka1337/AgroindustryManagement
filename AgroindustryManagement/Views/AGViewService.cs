@@ -150,8 +150,8 @@ using AgroindustryManagement.Models;
             Console.WriteLine($"ID:                {machine.Id}");
             Console.WriteLine($"Type:              {machine.Type}");
             Console.WriteLine($"Available:         {(machine.IsAvailable ? "Yes" : "No")}");
-            Console.WriteLine($"Assigned to Field: {(machine.AssignedToField.HasValue ? machine.AssignedToField.Value.ToString() : "None")}");
-            Console.WriteLine($"Resource ID:       {machine.ResourceId}");
+            Console.WriteLine($"Assigned to Field: {(machine.Field != null ? machine.Field.Id.ToString() : "None")}");
+            Console.WriteLine($"Resource ID:       {machine.Resource.Id}");
             Console.WriteLine("===================================");
         }
     
@@ -167,7 +167,7 @@ using AgroindustryManagement.Models;
 
             foreach (var machine in machines)
             {
-                Console.WriteLine($"| {machine.Id,-5} | {machine.Type,-12} | {(machine.IsAvailable ? "Yes" : "No"),-9} | {(machine.AssignedToField.HasValue ? machine.AssignedToField.Value.ToString() : "None"),-17} | {machine.ResourceId,-11} |");
+                Console.WriteLine($"| {machine.Id,-5} | {machine.Type,-12} | {(machine.IsAvailable ? "Yes" : "No"),-9} | {(machine.Field != null ? machine.Field.Id.ToString() : "None"),-17} | {machine.Resource.Id.ToString(),-11} |");
             }
 
             Console.WriteLine("==================================================================");
@@ -187,7 +187,7 @@ using AgroindustryManagement.Models;
             Console.WriteLine($"ID:                {item.Id}");
             Console.WriteLine($"Name:              {item.Name}");
             Console.WriteLine($"Quantity:          {item.Quantity} {item.Unit}");
-            Console.WriteLine($"Warehouse ID:      {item.WarehouseId}");
+            Console.WriteLine($"Warehouse ID:      {item.Warehouse.Id}");
             Console.WriteLine("===================================");
         }
     
@@ -203,7 +203,7 @@ using AgroindustryManagement.Models;
 
             foreach (var item in items)
             {
-                Console.WriteLine($"| {item.Id,-5} | {item.Name,-20} | {item.Quantity,-14} {item.Unit,-5} | {item.WarehouseId,-12} |");
+                Console.WriteLine($"| {item.Id,-5} | {item.Name,-20} | {item.Quantity,-14} {item.Unit,-5} | {item.Warehouse.Id,-12} |");
             }
 
             Console.WriteLine("===============================================================");
@@ -249,6 +249,80 @@ using AgroindustryManagement.Models;
 
             Console.WriteLine("==================================================================================================");
         }
+        
+        public void DisplayWarehouseDetails(Warehouse warehouse)
+        {
+            Console.WriteLine("===================================");
+            Console.WriteLine("Warehouse Details");
+            Console.WriteLine("===================================");
+            Console.WriteLine($"ID:                {warehouse.Id}");
+            Console.WriteLine("Inventory Items:");
+            if (warehouse.InventoryItems.Count > 0)
+            {
+                foreach (var item in warehouse.InventoryItems)
+                {
+                    Console.WriteLine($"- {item.Name} (ID: {item.Id}, Quantity: {item.Quantity} {item.Unit})");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No inventory items.");
+            }
+            Console.WriteLine("===================================");
+        }
+        
+        public void DisplayAllWarehouses(IEnumerable<Warehouse> warehouses)
+        {
+            Console.WriteLine("===================================");
+            Console.WriteLine("All Warehouses");
+            Console.WriteLine("===================================");
+            foreach (var warehouse in warehouses)
+            {
+                Console.WriteLine($"- Warehouse ID: {warehouse.Id}, Inventory Items Count: {warehouse.InventoryItems.Count}");
+            }
+            Console.WriteLine("===================================");
+        }
+        
+        public void DisplayResourceDetails(Resource resource)
+        {
+            Console.WriteLine("===================================");
+            Console.WriteLine("Resource Details");
+            Console.WriteLine("===================================");
+            Console.WriteLine($"ID:                          {resource.Id}");
+            Console.WriteLine($"Culture Type:                {resource.CultureType}");
+            Console.WriteLine($"Seed Per Hectare:            {resource.SeedPerHectare}");
+            Console.WriteLine($"Fertilizer Per Hectare:      {resource.FertilizerPerHectare}");
+            Console.WriteLine($"Worker Per Hectare:          {resource.WorkerPerHectare}");
+            Console.WriteLine($"Worker Work Durality/Ha:     {resource.WorkerWorkDuralityPerHectare}");
+            Console.WriteLine($"Yield:                       {resource.Yield}");
+            Console.WriteLine("Required Machines:");
+            if (resource.RequiredMachines.Any())
+            {
+                foreach (var machine in resource.RequiredMachines)
+                {
+                    Console.WriteLine($"- Machine ID: {machine.Id}, Type: {machine.Type}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No machines required.");
+            }
+            Console.WriteLine("===================================");
+        }
+        
+        public void DisplayAllResources(IEnumerable<Resource> resources)
+        {
+            Console.WriteLine("==================================================================================================================");
+            Console.WriteLine("| ID   | Culture Type       | Seed/Ha | Fertilizer/Ha | Worker/Ha | Work Durality/Ha | Yield   | Machines Count |");
+            Console.WriteLine("==================================================================================================================");
+        
+            foreach (var resource in resources)
+            {
+                Console.WriteLine($"| {resource.Id,-5} | {resource.CultureType,-17} | {resource.SeedPerHectare,-7} | {resource.FertilizerPerHectare,-13} | {resource.WorkerPerHectare,-9} | {resource.WorkerWorkDuralityPerHectare,-17} | {resource.Yield,-7} | {resource.RequiredMachines.Count,-14} |");
+            }
+        
+            Console.WriteLine("==================================================================================================================");
+        }
     
         // REPORTS
     
@@ -279,6 +353,7 @@ using AgroindustryManagement.Models;
 
         public void DisplayIds(string[] ids)
         {
+            Console.Write("Ids: ");
             foreach (var id in ids)
             {
                 Console.Write($"{id}; ");

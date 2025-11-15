@@ -39,16 +39,7 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayInventoryItem()
     {
-        var availableItemsIds = App.DatabaseService.GetAllInventoryItems().Select(item => item.Id.ToString()).ToArray();
-        App.ViewService.DisplayIds(availableItemsIds);
-        
-        var itemId = -1;
-        while (!availableItemsIds.Contains(itemId.ToString()))
-        {
-            itemId = App.ViewService.GetIntegerUserInputWithMessage("Enter Inventory Item Id");
-        }
-        
-        var item = App.DatabaseService.GetInventoryItemById(itemId);
+        var item = App.DatabaseService.GetInventoryItemById(GetInventoryItemId());
         App.ViewService.DisplayInventoryItemDetails(item);
     }
     
@@ -59,7 +50,11 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
     
     private void EditInventoryItem()
     {
-        
+        DisplayAllInventoryItems();
+        var id = GetInventoryItemId();
+        var existingItem = App.DatabaseService.GetInventoryItemById(id);
+        var updatedItem = App.DataCollector.EditData(existingItem);
+        App.DatabaseService.UpdateInventoryItem(updatedItem);
     }
     
     private void DeleteInventoryItem()
@@ -72,5 +67,19 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
     {
         var item = App.DataCollector.CollectData<InventoryItem>();
         App.DatabaseService.AddInventoryItem(item);
+    }
+    
+    private int GetInventoryItemId()
+    {
+        var availableItemsIds = App.DatabaseService.GetAllInventoryItems().Select(item => item.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableItemsIds);
+        
+        var itemId = -1;
+        while (!availableItemsIds.Contains(itemId.ToString()))
+        {
+            itemId = App.ViewService.GetIntegerUserInputWithMessage("Enter Inventory Item Id");
+        }
+
+        return itemId;
     }
 }

@@ -39,15 +39,7 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayField()
     {
-        var availableFieldsIds = App.DatabaseService.GetAllFields().Select(field => field.Id.ToString()).ToArray();
-        App.ViewService.DisplayIds(availableFieldsIds);
-        int fieldId = -1;
-        
-        while (!availableFieldsIds.Contains(fieldId.ToString()))
-        {
-            fieldId = App.ViewService.GetIntegerUserInputWithMessage("Enter field Id");
-        }
-        var field = App.DatabaseService.GetFieldById(fieldId);
+        var field = App.DatabaseService.GetFieldById(GetFieldId());
         App.ViewService.DisplayFieldDetails(field);
     }
 
@@ -65,12 +57,30 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
     
     private void EditField()
     {
-        
+        DisplayAllFields();
+        var id = GetFieldId();
+        var existingField = App.DatabaseService.GetFieldById(id);
+        var updatedField = App.DataCollector.EditData(existingField);
+        App.DatabaseService.UpdateField(updatedField);
     }
     
     private void DeleteField()
     {
         var fieldId = App.ViewService.GetIntegerUserInputWithMessage("Enter field Id");
         App.DatabaseService.DeleteField(fieldId);
+    }
+
+    private int GetFieldId()
+    {
+        var availableFieldsIds = App.DatabaseService.GetAllFields().Select(field => field.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableFieldsIds);
+        int fieldId = -1;
+        
+        while (!availableFieldsIds.Contains(fieldId.ToString()))
+        {
+            fieldId = App.ViewService.GetIntegerUserInputWithMessage("Enter field Id");
+        }
+
+        return fieldId;
     }
 }

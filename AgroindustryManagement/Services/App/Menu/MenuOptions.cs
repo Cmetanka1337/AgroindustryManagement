@@ -9,6 +9,8 @@ public static class MenuOptions
         public const string MachineActions = "MachineActions";
         public const string InventoryItemActions = "InventoryItemActions";
         public const string WorkerTaskActions = "WorkerTaskActions";
+        public const string WarehouseActions = "WarehouseActions";
+        public const string ResourceActions = "ResourceActions";
         public const string Exit = "Exit";
 
         public static Dictionary<int, string> NumericMenuOptions { get; } = new()
@@ -18,6 +20,8 @@ public static class MenuOptions
             { 3, MachineActions },
             { 4, InventoryItemActions },
             { 5, WorkerTaskActions },
+            { 6, WarehouseActions},
+            { 7, ResourceActions},
             { 0, Exit }
         };
     }
@@ -118,6 +122,46 @@ public static class MenuOptions
             { 3, EditWorkerTask },
             { 4, DeleteWorkerTask },
             { 5, AddWorkerTask },
+            { 0, Back }
+        };
+    }
+    
+    public static class WarehouseOptions
+    {
+        public const string DisplayWarehouse = "DisplayWarehouse";
+        public const string DisplayAllWarehouses = "DisplayAllWarehouses";
+        public const string EditWarehouse = "EditWarehouse";
+        public const string DeleteWarehouse = "DeleteWarehouse";
+        public const string AddWarehouse = "AddWarehouse";
+        public const string Back = "Back";
+
+        public static Dictionary<int, string> NumericMenuOptions { get; } = new()
+        {
+            { 1, DisplayWarehouse },
+            { 2, DisplayAllWarehouses },
+            { 3, EditWarehouse },
+            { 4, DeleteWarehouse },
+            { 5, AddWarehouse },
+            { 0, Back }
+        };
+    }
+    
+    public static class ResourceOptions
+    {
+        public const string DisplayResource = "DisplayResource";
+        public const string DisplayAllResources = "DisplayAllResources";
+        public const string EditResource = "EditResource";
+        public const string DeleteResource = "DeleteResource";
+        public const string AddResource = "AddResource";
+        public const string Back = "Back";
+
+        public static Dictionary<int, string> NumericMenuOptions { get; } = new()
+        {
+            { 1, DisplayResource },
+            { 2, DisplayAllResources },
+            { 3, EditResource },
+            { 4, DeleteResource },
+            { 5, AddResource },
             { 0, Back }
         };
     }

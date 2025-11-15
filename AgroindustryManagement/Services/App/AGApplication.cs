@@ -26,7 +26,9 @@ public class AGApplication
             { AGMenuState.MachineMenuState, new AGMachineMenuStateHandler(this) },
             { AGMenuState.InventoryItemMenuState, new AGInventoryItemMenuStateHandler(this) },
             { AGMenuState.WorkerMenuState, new AGWorkerMenuStateHandler(this) },
-            { AGMenuState.WorkerTaskMenuState, new AGWorkerTaskMenuStateHandler(this) }
+            { AGMenuState.WorkerTaskMenuState, new AGWorkerTaskMenuStateHandler(this) },
+            { AGMenuState.WarehouseMenuState, new AGWarehouseMenuStateHandler(this) },
+            { AGMenuState.ResourceMenuState, new AGResourceStateMenuHandler(this) }
         };
     }
 

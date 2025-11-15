@@ -1,5 +1,4 @@
 using AgroindustryManagement.Models;
-using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 
 namespace AgroindustryManagement.Services.Database;
@@ -190,10 +189,8 @@ public class AGDatabaseService : IAGDatabaseService
             throw new KeyNotFoundException("Such machine is not found"); 
         }
         
-        existingMachine.AssignedToField = machine.AssignedToField;
         existingMachine.Field = machine.Field;
         existingMachine.Resource = machine.Resource;
-        existingMachine.ResourceId = machine.ResourceId;
         existingMachine.IsAvailable=machine.IsAvailable;
         existingMachine.Type= machine.Type;
         existingMachine.FuelConsumption= machine.FuelConsumption;
@@ -262,7 +259,6 @@ public class AGDatabaseService : IAGDatabaseService
         existingItem.Quantity = item.Quantity;
         existingItem.Unit = item.Unit;
         existingItem.Warehouse = item.Warehouse;
-        existingItem.WarehouseId = item.WarehouseId;
         
         _context.SaveChanges();
     }
@@ -349,6 +345,135 @@ public class AGDatabaseService : IAGDatabaseService
         _context.WorkerTasks.Remove(task);
         _context.SaveChanges();   
     }
+    
+    public Resource GetResourceById(int resourceId)
+    {
+        if (resourceId <= 0)
+        {
+            throw new ArgumentException("Id must be positive", nameof(resourceId));
+        }
+        
+        var resource = _context.Resources.FirstOrDefault(dbResource => dbResource.Id == resourceId);
+        if (resource == null)
+        {
+            throw new KeyNotFoundException("Resource with such id is not found");
+        }
+        
+        return resource;
+    }
+    
+    public void AddResource(Resource resource)
+    {
+        if (_context.Resources.FirstOrDefault(dbResource => dbResource.Id == resource.Id) != null) 
+            return;
+        
+        _context.Resources.Add(resource);
+        _context.SaveChanges();
+    }
+    
+    public void EditResource(Resource resource)
+    {
+        var existingResource = _context.Resources.FirstOrDefault(dbResource => dbResource.Id == resource.Id);
+        if (existingResource == null)
+        {
+            throw new KeyNotFoundException("Resource is not found");
+        }
+        
+        existingResource.CultureType = resource.CultureType;
+        existingResource.SeedPerHectare = resource.SeedPerHectare;
+        existingResource.FertilizerPerHectare = resource.FertilizerPerHectare;
+        existingResource.WorkerPerHectare = resource.WorkerPerHectare;
+        existingResource.WorkerWorkDuralityPerHectare = resource.WorkerWorkDuralityPerHectare;
+        existingResource.Yield = resource.Yield;
+        existingResource.RequiredMachines = resource.RequiredMachines;
+        
+        _context.SaveChanges();
+    }
+    
+    public void DeleteResource(int resourceId)
+    {
+        if (resourceId <= 0)
+        {
+            throw new ArgumentException("Id must be positive", nameof(resourceId));
+        }
+        
+        var resource = _context.Resources.FirstOrDefault(dbResource => dbResource.Id == resourceId);
+        if (resource == null)
+        {
+            throw new KeyNotFoundException("Such resource is not found");
+        }
+        
+        _context.Resources.Remove(resource);
+        _context.SaveChanges();
+    }
+    
+    public IEnumerable<Resource> GetAllResources()
+    {
+        var resources = _context.Resources.ToList();
+        return resources.Count == 0 ? Enumerable.Empty<Resource>() : resources;
+    }
+    
+    public Warehouse GetWarehouseById(int warehouseId)
+    {
+        if (warehouseId <= 0)
+        {
+            throw new ArgumentException("Id must be positive", nameof(warehouseId));
+        }
+        
+        var warehouse = _context.Warehouses.FirstOrDefault(dbWarehouse => dbWarehouse.Id == warehouseId);
+        if (warehouse == null)
+        {
+            throw new KeyNotFoundException("Warehouse with such id is not found");
+        }
+
+        return warehouse;
+    }
+    
+    public IEnumerable<Warehouse> GetAllWarehouses()
+    {
+        var warehouses = _context.Warehouses.ToList();
+        return warehouses.Count == 0 ? Enumerable.Empty<Warehouse>() : warehouses;
+    }
+    
+    public void AddWarehouse(Warehouse warehouse)
+    {
+        if (_context.Warehouses.FirstOrDefault(dbWarehouse => dbWarehouse.Id == warehouse.Id) != null) 
+            return;
+        
+        _context.Warehouses.Add(warehouse);
+        _context.SaveChanges();
+    }
+    
+    public void UpdateWarehouse(Warehouse warehouse)
+    {
+        var existingWarehouse = _context.Warehouses.FirstOrDefault(dbWarehouse => dbWarehouse.Id == warehouse.Id);
+        if (existingWarehouse == null)
+        {
+            throw new KeyNotFoundException("Warehouse is not found");
+        }
+        
+        existingWarehouse.InventoryItems = warehouse.InventoryItems;
+        
+        _context.SaveChanges();
+    }
+    
+    public void DeleteWarehouse(int warehouseId)
+    {
+        if (warehouseId <= 0)
+        {
+            throw new ArgumentException("Id must be positive", nameof(warehouseId));
+        }
+        
+        var warehouse = _context.Warehouses.FirstOrDefault(dbWarehouse => dbWarehouse.Id == warehouseId);
+        if (warehouse == null)
+        {
+            throw new KeyNotFoundException("Such warehouse is not found");
+        }
+        
+        _context.Warehouses.Remove(warehouse);
+        _context.SaveChanges();
+    }
+    
     public Resource GetResourceByCultureType(CultureType cultureType)
     {
         if (!Enum.IsDefined(typeof(CultureType), cultureType))

@@ -39,16 +39,7 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayWorker()
     {
-        var availableWorkersIds = App.DatabaseService.GetAllWorkers().Select(worker => worker.Id.ToString()).ToArray();
-        App.ViewService.DisplayIds(availableWorkersIds);
-        
-        var workerId = -1;
-        while (!availableWorkersIds.Contains(workerId.ToString()))
-        {
-            workerId = App.ViewService.GetIntegerUserInputWithMessage("Enter Worker Id");
-        }
-        
-        var worker = App.DatabaseService.GetWorkerById(workerId);
+        var worker = App.DatabaseService.GetWorkerById(GetWorkerId());
         App.ViewService.DisplayWorkerDetails(worker);
     }
     
@@ -59,7 +50,11 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
     
     private void EditWorker()
     {
-        
+        DisplayAllWorkers();
+        var id = GetWorkerId();
+        var existingWorker = App.DatabaseService.GetWorkerById(id);
+        var updatedWorker = App.DataCollector.EditData(existingWorker);
+        App.DatabaseService.UpdateWorker(updatedWorker);
     }
     
     private void DeleteWorker()
@@ -72,5 +67,19 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
     {
         var worker = App.DataCollector.CollectData<Worker>();
         App.DatabaseService.AddWorker(worker);
+    }
+    
+    private int GetWorkerId()
+    {
+        var availableWorkersIds = App.DatabaseService.GetAllWorkers().Select(worker => worker.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableWorkersIds);
+        
+        var workerId = -1;
+        while (!availableWorkersIds.Contains(workerId.ToString()))
+        {
+            workerId = App.ViewService.GetIntegerUserInputWithMessage("Enter Worker Id");
+        }
+
+        return workerId;
     }
 }

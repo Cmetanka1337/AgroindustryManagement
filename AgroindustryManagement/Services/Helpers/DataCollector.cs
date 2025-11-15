@@ -13,7 +13,6 @@ public class DataCollector
         _databaseService = databaseService;
     }
 
-    // TODO: Add check not only for lists but for other complex types as well
     public T CollectData<T>() where T : new()
     {
         var model = new T();
@@ -47,6 +46,53 @@ public class DataCollector
             }
         }
         return model;
+    }
+    
+    public T EditData<T>(T existingModel) where T : class
+    {
+        foreach (var property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            if (!property.CanWrite || property.PropertyType == typeof(DateTime) || property.Name == "Id")
+            {
+                Console.WriteLine($"Skipping property: {property.Name}");
+                continue;
+            }
+    
+            var currentValue = property.GetValue(existingModel);
+            Console.WriteLine($"Current value for {property.Name}: {currentValue}");
+    
+            if (property.PropertyType.IsEnum)
+            {
+                HandleEnumProperty(property, existingModel);
+            }
+            else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType != typeof(string))
+            {
+                HandleListProperty(property, existingModel);
+            }
+            else if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
+            {
+                HandleSingleModelProperty(property, existingModel);
+            }
+            else if (property.PropertyType.IsPrimitive || property.PropertyType.IsValueType || property.PropertyType == typeof(string))
+            {
+                Console.WriteLine($"Enter new value for {property.Name} ({property.PropertyType.Name}) or press Enter to keep the current value:");
+                var input = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(input))
+                {
+                    var convertedValue = ValidateAndConvertInput(input, property.PropertyType);
+                    if (convertedValue != null)
+                    {
+                        property.SetValue(existingModel, convertedValue);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Skipping property {property.Name} (type: {property.PropertyType.Name})");
+            }
+        }
+    
+        return existingModel;
     }
 
     private void HandleEnumProperty<T>(PropertyInfo property, T model)

@@ -38,16 +38,7 @@ public class AGWorkerTaskMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayWorkerTask()
     {
-        var availableWorkerTasksIds = App.DatabaseService.GetAllWorkerTasks().Select(task => task.Id.ToString()).ToArray();
-        App.ViewService.DisplayIds(availableWorkerTasksIds);
-        
-        var workerTaskId = -1;
-        while (!availableWorkerTasksIds.Contains(workerTaskId.ToString()))
-        {
-            workerTaskId = App.ViewService.GetIntegerUserInputWithMessage("Enter Worker Task Id");
-        }
-        
-        var workerTask = App.DatabaseService.GetWorkerTaskById(workerTaskId);
+        var workerTask = App.DatabaseService.GetWorkerTaskById(GetWorkerTaskId());
         App.ViewService.DisplayWorkerTaskDetails(workerTask);
     }
     
@@ -58,7 +49,11 @@ public class AGWorkerTaskMenuStateHandler: IAGMenuStateHandler
     
     private void EditWorkerTask()
     {
-        
+        DisplayAllWorkerTasks();
+        var id = GetWorkerTaskId();
+        var existingWorkerTask = App.DatabaseService.GetWorkerTaskById(id);
+        var updatedWorkerTask = App.DataCollector.EditData(existingWorkerTask);
+        App.DatabaseService.UpdateWorkerTask(updatedWorkerTask);
     }
     
     private void DeleteWorkerTask()
@@ -70,6 +65,24 @@ public class AGWorkerTaskMenuStateHandler: IAGMenuStateHandler
     private void AddWorkerTask()
     {
         var workerTask = App.DataCollector.CollectData<WorkerTask>();
+        workerTask.StartDate = DateTime.Now;
+        workerTask.EstimatesEndDate = DateTime.MaxValue;
+        workerTask.RealEndDate = DateTime.MaxValue;
+        
         App.DatabaseService.AddWorkerTask(workerTask);
+    }
+    
+    private int GetWorkerTaskId()
+    {
+        var availableWorkerTasksIds = App.DatabaseService.GetAllWorkerTasks().Select(task => task.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableWorkerTasksIds);
+        
+        var workerTaskId = -1;
+        while (!availableWorkerTasksIds.Contains(workerTaskId.ToString()))
+        {
+            workerTaskId = App.ViewService.GetIntegerUserInputWithMessage("Enter Worker Task Id");
+        }
+
+        return workerTaskId;
     }
 }

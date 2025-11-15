@@ -39,16 +39,7 @@ public class AGMachineMenuStateHandler: IAGMenuStateHandler
     private void DisplayMachine()
     {
         // crashed here
-        var availableMachinesIds = App.DatabaseService.GetAllMachines().Select(machine => machine.Id.ToString()).ToArray();
-        App.ViewService.DisplayIds(availableMachinesIds);
-        
-        var machineId = -1;
-        while (!availableMachinesIds.Contains(machineId.ToString()))
-        {
-            machineId = App.ViewService.GetIntegerUserInputWithMessage("Enter Machine Id");
-        }
-        
-        var machine = App.DatabaseService.GetMachineById(machineId);
+        var machine = App.DatabaseService.GetMachineById(GetMachineId());
         App.ViewService.DisplayMachineDetails(machine);
     }
     
@@ -59,7 +50,11 @@ public class AGMachineMenuStateHandler: IAGMenuStateHandler
     
     private void EditMachine()
     {
-        
+        DisplayAllMachines();
+        var id = GetMachineId();
+        var existingMachine = App.DatabaseService.GetMachineById(id);
+        var updatedMachine = App.DataCollector.EditData(existingMachine);
+        App.DatabaseService.UpdateMachine(updatedMachine);
     }
     
     private void DeleteMachine()
@@ -72,5 +67,19 @@ public class AGMachineMenuStateHandler: IAGMenuStateHandler
     {
         var machine = App.DataCollector.CollectData<Machine>();
         App.DatabaseService.AddMachine(machine);
+    }
+    
+    private int GetMachineId()
+    {
+        var availableMachinesIds = App.DatabaseService.GetAllMachines().Select(machine => machine.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableMachinesIds);
+        
+        var machineId = -1;
+        while (!availableMachinesIds.Contains(machineId.ToString()))
+        {
+            machineId = App.ViewService.GetIntegerUserInputWithMessage("Enter Machine Id");
+        }
+
+        return machineId;
     }
 }
