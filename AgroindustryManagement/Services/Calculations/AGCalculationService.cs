@@ -1,30 +1,26 @@
 using AgroindustryManagement.Models;
 using AgroindustryManagement.Services.Database;
-using System;
 
 namespace AgroindustryManagement.Services.Calculations;
 
 public class AGCalculationService : IAGCalculationService
 {
-    private readonly IAGDatabaseService _databaseService;
+    // Why CalculationService should have access to database? 
+    // CalculationService performs calculations rather than accessing the database
+    // All data required for calculations should be passed as parameters to its methods.
+    private readonly IAGDatabaseService _databaseService;  
     public AGCalculationService(IAGDatabaseService databaseService)
     {
         _databaseService = databaseService;
     }
-    public double CalculateSeedAmount(string cropType, double areaInHectares)
+    public double CalculateSeedAmount(CultureType cropType, double areaInHectares)
     {
-        if (string.IsNullOrEmpty(cropType))
-        {
-            throw new ArgumentException("Crop type cannot be null or empty.", nameof(cropType));
-        }
         if (areaInHectares <= 0)
         {
             throw new ArgumentException("Area in hectares must be greater than zero.");
         }
-
-        var culture = Enum.Parse<Models.CultureType>(cropType, true);
-
-        var resource = _databaseService.GetResourceByCultureType(culture);
+        
+        var resource = _databaseService.GetResourceByCultureType(cropType);
 
         if (resource == null)
         {
@@ -35,19 +31,14 @@ public class AGCalculationService : IAGCalculationService
 
         return seedAmount;
     }
-    //TODO if we want this be implemented, we need to have fertilizer data in Resource model
-    public double CalculateFertilizerAmount(string cropType, double areaInHectares)
+    
+    public double CalculateFertilizerAmount(CultureType cropType, double areaInHectares)
     {
-        if (string.IsNullOrEmpty(cropType))
-        {
-            throw new ArgumentException("Crop type cannot be null or empty.", nameof(cropType));
-        }
         if (areaInHectares <= 0)
         {
             throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
-        var culture = Enum.Parse<Models.CultureType>(cropType, true);
-        var resource = _databaseService.GetResourceByCultureType(culture);
+        var resource = _databaseService.GetResourceByCultureType(cropType);
         if (resource == null)
         {
             throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
@@ -55,40 +46,29 @@ public class AGCalculationService : IAGCalculationService
         return resource.FertilizerPerHectare*areaInHectares;
     }
 
-    public double EstimateYield(string cropType, double areaInHectares)
+    public double EstimateYield(CultureType cropType, double areaInHectares)
     {
-        if (string.IsNullOrEmpty(cropType))
-        {
-            throw new ArgumentException("Crop type cannot be null or empty.", nameof(cropType));
-        }
         if (areaInHectares <= 0)
         {
             throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
 
-        var culture = Enum.Parse<Models.CultureType>(cropType, true);
-        var resource = _databaseService.GetResourceByCultureType(culture);
+        var resource = _databaseService.GetResourceByCultureType(cropType);
         if(resource == null)
         {
             throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
         }
-        return resource.Yield*areaInHectares;
+        return resource.Yield * areaInHectares;
     }
 
-    public int CalculateRequiredMachineryCount(string cropType, double areaInHectares)
+    public int CalculateRequiredMachineryCount(CultureType cropType, double areaInHectares)
     {
-        if (string.IsNullOrEmpty(cropType))
-        {
-            throw new ArgumentException("Crop type cannot be null or empty.", nameof(cropType));
-        }
         if (areaInHectares <= 0)
         {
             throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
 
-        var culture = Enum.Parse<Models.CultureType>(cropType, true);
-
-        var resource = _databaseService.GetResourceByCultureType(culture);
+        var resource = _databaseService.GetResourceByCultureType(cropType);
 
         if (resource == null)
         {
@@ -97,41 +77,26 @@ public class AGCalculationService : IAGCalculationService
 
         return resource.RequiredMachines.Count;
     }
-    //TODO if we want this be implemented, we need to have fuel consumption data in Machine model 
-    public double EstimateFuelConsumption(string machineType, double areaInHectares)
+     
+    public double EstimateFuelConsumption(MachineType machineType, double areaInHectares)
     {
-        if(string.IsNullOrEmpty(machineType))
-        {
-            throw new ArgumentException(nameof(machineType), "Machine type cannot be null or empty.");
-        }
         if (areaInHectares <= 0)
         {
             throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
-        var machine=Enum.Parse<Models.MachineType>(machineType, true);
-        var concreteMachine=_databaseService.GetMachineByMachineType(machine);
-        if(concreteMachine==null)
-        {
-            throw new KeyNotFoundException($"No machine found for machine type: {machineType}");
-        }
-        return concreteMachine.FuelConsumption*areaInHectares;
+        var concreteMachine=_databaseService.GetMachineByMachineType(machineType);
+        return concreteMachine.FuelConsumption * areaInHectares;
 
     }
 
-    public int CalculateRequiredWorkers(string cropType, double areaInHectares)
+    public int CalculateRequiredWorkers(CultureType cropType, double areaInHectares)
     {
-        if (string.IsNullOrEmpty(cropType))
-        {
-            throw new ArgumentException("Crop type cannot be null or empty.", nameof(cropType));
-        }
         if (areaInHectares <= 0)
         {
             throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
         }
 
-        var culture = Enum.Parse<Models.CultureType>(cropType, true);
-
-        var resource = _databaseService.GetResourceByCultureType(culture);
+        var resource = _databaseService.GetResourceByCultureType(cropType);
 
         if (resource == null)
         {
@@ -141,37 +106,26 @@ public class AGCalculationService : IAGCalculationService
         return (int)Math.Ceiling(resource.WorkerPerHectare * areaInHectares);
     }
 
-    public double EstimateWorkDuration(double areaInHectares, int workersCount, string machineryType, string cropType)
+    public double EstimateWorkDuration(double areaInHectares, int workersCount, MachineType machineryType, CultureType cropType)
     {
-        if (string.IsNullOrEmpty(cropType) || string.IsNullOrEmpty(machineryType))
-        {
-            throw new ArgumentException("Crop type and machine type cannot be null or empty.");
-        }
         if (areaInHectares <= 0 || workersCount<=0)
         { 
             throw new ArgumentException("Area in hectares and workers count must be greater than zero.");
         }
-        var machine=Enum.Parse<Models.MachineType>(machineryType, true);
-        var culture=Enum.Parse<Models.CultureType>(cropType, true);
-        var resource=_databaseService.GetResourceByCultureType(culture);
-        if (resource==null)
-        {
-            throw new KeyNotFoundException($"No resource are found");
-        }
-        var concreteMachine=_databaseService.GetMachineByMachineType(machine);
-       
-        if (concreteMachine==null)
+        var resource = _databaseService.GetResourceByCultureType(cropType);
+        var concreteMachine = _databaseService.GetMachineByMachineType(machineryType);
+        if(resource == null || concreteMachine==null)
         {
             throw new KeyNotFoundException($"No machine are found");
         }
-        double duralityOfWorkerWork=(resource.WorkerWorkDuralityPerHectare/workersCount)*areaInHectares;
-        double duralityOfMachineWork=concreteMachine.WorkDuralityPerHectare*areaInHectares;
-        return Math.Max(duralityOfWorkerWork, duralityOfMachineWork);
+        double durationOfWorkerWork = resource.WorkerWorkDuralityPerHectare / workersCount * areaInHectares;
+        double durationOfMachineWork = concreteMachine.WorkDuralityPerHectare * areaInHectares;
+        return durationOfWorkerWork + durationOfMachineWork;
     }
 
     public decimal CalculateBonus(int workerId)
     {
-        if(workerId<=0)
+        if (workerId <= 0)
         { 
             throw new ArgumentException("Worker id must be greater than zero. "); 
         }
@@ -185,34 +139,49 @@ public class AGCalculationService : IAGCalculationService
         var tasks = _databaseService.GetTasksByWorkerId(workerId);
         decimal bonusPerDay = 0.02m;
         decimal sumOfBonuses = 0;
-        decimal bonus;
-        foreach (var task in tasks)
+        foreach ( var task in tasks)
         {
-            var differenceInDays = (task.EstimatesEndDate - task.RealEndDate).Days;
-            if (differenceInDays>0)
+            var differenceInDays=(task.EstimatesEndDate - task.RealEndDate).Days;
+            decimal bonus;
+            if (differenceInDays<=0)
+            {
+                bonus = 0;
+            }
+            else
             {
                 bonus=differenceInDays*bonusPerDay;
                 if (bonus>0.06m)
                     bonus=0.06m;
                 sumOfBonuses+=bonus;
             }
+            if(bonus > 0.06m)
+                bonus = 0.06m;
+            sumOfBonuses += bonus;
         }
-        decimal finalBonus = salary*sumOfBonuses;
-        return finalBonus;
+        var worker = _databaseService.GetWorkerById(workerId);
+        if(worker==null)
+        {
+            throw new InvalidOperationException("Worker with such Id is not found");
+        }
+
+        var salary = worker.HourlyRate * worker.HoursWorked;
+        return salary * sumOfBonuses;
     }
 
-    public double CalculateWorkerEfficiency(double plannedWork, double completedWork, TimeSpan actualTime)
-    {
-        throw new NotImplementedException();
-    }
-    //TODO if we want this be implemented, we need to have cost data in Resource and Machine models
-    public double CalculateFieldCost(string cropType, double areaInHectares)
-    {
-        throw new NotImplementedException();
-    }
-    //TODO if we want this be implemented, we need to have enumeration data for market prices
-    public double EstimateProfit(string cropType, double areaInHectares, double marketPricePerTon)
-    {
-        throw new NotImplementedException();
-    }
+    // UNIMPLEMENTED METHODS
+    
+    // public double CalculateWorkerEfficiency(double plannedWork, double completedWork, TimeSpan actualTime)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    // public double CalculateFieldCost(CultureType cropType, double areaInHectares)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    // public double EstimateProfit(CultureType cropType, double areaInHectares, double marketPricePerTon)
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

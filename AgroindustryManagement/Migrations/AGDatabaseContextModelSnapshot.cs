@@ -15,7 +15,7 @@ namespace AgroindustryManagement.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.21");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
 
             modelBuilder.Entity("AgroindustryManagement.Models.Field", b =>
                 {
@@ -71,9 +71,6 @@ namespace AgroindustryManagement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("AssignedToField")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("FieldId")

@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgroindustryManagement.Migrations
 {
     [DbContext(typeof(AGDatabaseContext))]
-    [Migration("20251108124401_AddFuelConsumption")]
-    partial class AddFuelConsumption
+    [Migration("20251110114954_Updates")]
+    partial class Updates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.21");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
 
             modelBuilder.Entity("AgroindustryManagement.Models.Field", b =>
                 {
@@ -82,8 +82,8 @@ namespace AgroindustryManagement.Migrations
                     b.Property<int?>("FieldId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FuelConsumption")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("FuelConsumption")
+                        .HasColumnType("REAL");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("INTEGER");
@@ -93,6 +93,9 @@ namespace AgroindustryManagement.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
+
+                    b.Property<double>("WorkDuralityPerHectare")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 
@@ -119,6 +122,12 @@ namespace AgroindustryManagement.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<double>("WorkerPerHectare")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("WorkerWorkDuralityPerHectare")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Yield")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
@@ -153,8 +162,8 @@ namespace AgroindustryManagement.Migrations
                     b.Property<decimal>("HourlyRate")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("HoursWorked")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("HoursWorked")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
@@ -186,6 +195,9 @@ namespace AgroindustryManagement.Migrations
 
                     b.Property<double>("Progress")
                         .HasColumnType("REAL");
+
+                    b.Property<DateTime>("RealEndDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");

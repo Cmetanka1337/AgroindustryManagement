@@ -12,7 +12,6 @@ public class InventoryItem
     }
 
     public int Id { get; set; }
-    public int WarehouseId { get; set; }
     public virtual Warehouse Warehouse { get; set; }
     public string Name { get; set; }
     public int Quantity { get; set; }

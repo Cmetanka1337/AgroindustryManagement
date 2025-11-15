@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgroindustryManagement.Migrations
 {
     [DbContext(typeof(AGDatabaseContext))]
-    [Migration("20251109174028_AddedRealEndDateToWorkerTaskAndInHoursWorkedChangeTypeToDecimal")]
-    partial class AddedRealEndDateToWorkerTaskAndInHoursWorkedChangeTypeToDecimal
+    [Migration("20251115183710_UpdatedModels")]
+    partial class UpdatedModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.21");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
 
             modelBuilder.Entity("AgroindustryManagement.Models.Field", b =>
                 {

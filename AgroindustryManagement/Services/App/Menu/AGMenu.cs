@@ -12,7 +12,9 @@ public class AGMenu
         { AGMenuState.WorkerMenuState, MenuOptions.WorkerOptions.NumericMenuOptions },
         { AGMenuState.MachineMenuState, MenuOptions.MachineOptions.NumericMenuOptions },
         { AGMenuState.InventoryItemMenuState, MenuOptions.InventoryItemOptions.NumericMenuOptions },
-        { AGMenuState.WorkerTaskMenuState, MenuOptions.WorkerTaskOptions.NumericMenuOptions }
+        { AGMenuState.WorkerTaskMenuState, MenuOptions.WorkerTaskOptions.NumericMenuOptions },
+        { AGMenuState.WarehouseMenuState, MenuOptions.WarehouseOptions.NumericMenuOptions },
+        { AGMenuState.ResourceMenuState, MenuOptions.ResourceOptions.NumericMenuOptions }
     };
     
     public string CurrentState => _state;
@@ -94,6 +96,8 @@ public class AGMenu
             AGMenuState.MachineMenuState => MenuOptions.MachineOptions.NumericMenuOptions,
             AGMenuState.InventoryItemMenuState => MenuOptions.InventoryItemOptions.NumericMenuOptions,
             AGMenuState.WorkerTaskMenuState => MenuOptions.WorkerTaskOptions.NumericMenuOptions,
+            AGMenuState.WarehouseMenuState => MenuOptions.WarehouseOptions.NumericMenuOptions,
+            AGMenuState.ResourceMenuState => MenuOptions.ResourceOptions.NumericMenuOptions,
             AGMenuState.MainMenuState => MenuOptions.MainOptions.NumericMenuOptions,
             _ => MenuOptions.MainOptions.NumericMenuOptions
         };

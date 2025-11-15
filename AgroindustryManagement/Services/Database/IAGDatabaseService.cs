@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AgroindustryManagement.Models;
 
 namespace AgroindustryManagement.Services.Database;
@@ -174,6 +173,7 @@ public interface IAGDatabaseService
     /// <param name="taskId">The unique identifier of the worker task to delete.</param>
     void DeleteWorkerTask(int taskId);
     #endregion
+    
     // Additional utility methods
     Resource GetResourceByCultureType(CultureType cultureType);
     Machine GetMachineByMachineType(MachineType machineType);

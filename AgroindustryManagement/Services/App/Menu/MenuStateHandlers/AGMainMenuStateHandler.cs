@@ -28,6 +28,12 @@ public class MainMenuStateHandler : IAGMenuStateHandler
             case MenuOptions.MainOptions.WorkerTaskActions:
                 app.SetMenuState(AGMenuState.WorkerTaskMenuState);
                 break;
+            case MenuOptions.MainOptions.WarehouseActions:
+                app.SetMenuState(AGMenuState.WarehouseMenuState);
+                break;
+            case MenuOptions.MainOptions.ResourceActions:
+                app.SetMenuState(AGMenuState.ResourceMenuState);
+                break;
             case MenuOptions.MainOptions.Exit:
                 app.Stop();
                 break;

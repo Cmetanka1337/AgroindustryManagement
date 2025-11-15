@@ -1,0 +1,266 @@
+using System.Collections;
+using System.Reflection;
+using AgroindustryManagement.Services.Database;
+
+namespace AgroindustryManagement.Services.Helpers;
+
+public class DataCollector
+{
+    private readonly AGDatabaseService _databaseService;
+
+    public DataCollector(AGDatabaseService databaseService)
+    {
+        _databaseService = databaseService;
+    }
+
+    public T CollectData<T>() where T : new()
+    {
+        var model = new T();
+        foreach (var property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            if (!property.CanWrite || property.PropertyType == typeof(DateTime))
+            {
+                Console.WriteLine($"Skipping property: {property.Name}");
+                continue;
+            }
+    
+            if (property.PropertyType.IsEnum)
+            {
+                HandleEnumProperty(property, model);
+            }
+            else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType != typeof(string))
+            {
+                HandleListProperty(property, model);
+            }
+            else if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
+            {
+                HandleSingleModelProperty(property, model);
+            }
+            else if (property.PropertyType.IsPrimitive || property.PropertyType.IsValueType || property.PropertyType == typeof(string))
+            {
+                HandleSimpleProperty(property, model);
+            }
+            else
+            {
+                Console.WriteLine($"Skipping property {property.Name} (type: {property.PropertyType.Name})");
+            }
+        }
+        return model;
+    }
+    
+    public T EditData<T>(T existingModel) where T : class
+    {
+        foreach (var property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            if (!property.CanWrite || property.PropertyType == typeof(DateTime) || property.Name == "Id")
+            {
+                Console.WriteLine($"Skipping property: {property.Name}");
+                continue;
+            }
+    
+            var currentValue = property.GetValue(existingModel);
+            Console.WriteLine($"Current value for {property.Name}: {currentValue}");
+    
+            if (property.PropertyType.IsEnum)
+            {
+                HandleEnumProperty(property, existingModel);
+            }
+            else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType != typeof(string))
+            {
+                HandleListProperty(property, existingModel);
+            }
+            else if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
+            {
+                HandleSingleModelProperty(property, existingModel);
+            }
+            else if (property.PropertyType.IsPrimitive || property.PropertyType.IsValueType || property.PropertyType == typeof(string))
+            {
+                Console.WriteLine($"Enter new value for {property.Name} ({property.PropertyType.Name}) or press Enter to keep the current value:");
+                var input = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(input))
+                {
+                    var convertedValue = ValidateAndConvertInput(input, property.PropertyType);
+                    if (convertedValue != null)
+                    {
+                        property.SetValue(existingModel, convertedValue);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Skipping property {property.Name} (type: {property.PropertyType.Name})");
+            }
+        }
+    
+        return existingModel;
+    }
+
+    private void HandleEnumProperty<T>(PropertyInfo property, T model)
+    {
+        Console.WriteLine($"Select value for {property.Name}:");
+        var enumValues = Enum.GetValues(property.PropertyType);
+        foreach (var value in enumValues)
+        {
+            Console.WriteLine($"{(int)value}. {value}");
+        }
+
+        int choice = ValidateIntegerInput("Enter your choice: ", value => Enum.IsDefined(property.PropertyType, value));
+        property.SetValue(model, Enum.ToObject(property.PropertyType, choice));
+    }
+
+    private void HandleListProperty<T>(PropertyInfo property, T model)
+    {
+        var itemType = property.PropertyType.GenericTypeArguments[0];
+        var fetchMethod = typeof(AGDatabaseService).GetMethod($"GetAll{itemType.Name}s");
+        if (fetchMethod != null)
+        {
+            var relatedEntities = (IEnumerable)fetchMethod.Invoke(_databaseService, null);
+
+            if (!relatedEntities.Cast<object>().Any())
+            {
+                Console.WriteLine($"No available {itemType.Name}s. Initializing {property.Name} as an empty list.");
+                property.SetValue(model, Activator.CreateInstance(typeof(List<>).MakeGenericType(itemType)));
+                return;
+            }
+
+            Console.WriteLine($"Available {itemType.Name}s:");
+            foreach (var entity in relatedEntities)
+            {
+                var idProperty = entity.GetType().GetProperty("Id");
+                if (idProperty != null)
+                {
+                    Console.WriteLine($"Id: {idProperty.GetValue(entity)}");
+                }
+            }
+
+            Console.WriteLine($"Enter the IDs of the {itemType.Name}s to add to {property.Name}, separated by commas:");
+            var input = Console.ReadLine();
+            var selectedIds = ValidateListInput(input, id => int.TryParse(id, out _));
+
+            var selectedEntities = Activator.CreateInstance(typeof(List<>).MakeGenericType(itemType)) as IList;
+            foreach (var entity in relatedEntities)
+            {
+                var idProperty = entity.GetType().GetProperty("Id");
+                if (idProperty != null && selectedIds.Contains((int)idProperty.GetValue(entity)))
+                {
+                    selectedEntities?.Add(entity);
+                }
+            }
+
+            property.SetValue(model, selectedEntities);
+        }
+        else
+        {
+            Console.WriteLine($"No method found to fetch {itemType.Name}s. Skipping property {property.Name}.");
+        }
+    }
+
+    private void HandleSingleModelProperty<T>(PropertyInfo property, T model)
+    {
+        var entityType = property.PropertyType;
+        var fetchMethod = typeof(AGDatabaseService).GetMethod($"GetAll{entityType.Name}s");
+    
+        if (fetchMethod == null)
+        {
+            Console.WriteLine($"No method found to fetch {entityType.Name}s. Skipping property {property.Name}.");
+            return;
+        }
+    
+        var entities = (IEnumerable)fetchMethod.Invoke(_databaseService, null);
+        var entityList = entities.Cast<object>().ToList();
+    
+        if (!entityList.Any())
+        {
+            Console.WriteLine($"No available {entityType.Name}s. Skipping property {property.Name}.");
+            return;
+        }
+    
+        Console.WriteLine($"Available {entityType.Name}s:");
+        foreach (var entity in entityList)
+        {
+            var idProperty = entity.GetType().GetProperty("Id");
+            var nameProperty = entity.GetType().GetProperty("FirstName") ?? entity.GetType().GetProperty("Name");
+            if (idProperty != null)
+            {
+                Console.Write($"Id: {idProperty.GetValue(entity)}");
+                if (nameProperty != null)
+                {
+                    Console.WriteLine($", Name: {nameProperty.GetValue(entity)}");
+                }
+                else
+                {
+                    Console.WriteLine();
+                }
+            }
+        }
+    
+        Console.WriteLine($"Enter the ID of the {entityType.Name} to assign to {property.Name}:");
+        var input = Console.ReadLine();
+        if (int.TryParse(input, out var selectedId))
+        {
+            var selectedEntity = entityList.FirstOrDefault(e =>
+            {
+                var idProperty = e.GetType().GetProperty("Id");
+                return idProperty != null && (int)idProperty.GetValue(e) == selectedId;
+            });
+    
+            if (selectedEntity != null)
+            {
+                property.SetValue(model, selectedEntity);
+                return;
+            }
+        }
+    
+        Console.WriteLine($"Invalid ID entered for {entityType.Name}. Skipping property {property.Name}.");
+    }
+    
+    private void HandleSimpleProperty<T>(PropertyInfo property, T model)
+    {
+        Console.WriteLine($"Enter value for {property.Name} ({property.PropertyType.Name}):");
+        var input = Console.ReadLine();
+        var convertedValue = ValidateAndConvertInput(input, property.PropertyType);
+        if (convertedValue != null)
+        {
+            property.SetValue(model, convertedValue);
+        }
+    }
+
+    private int ValidateIntegerInput(string prompt, Func<int, bool> validation)
+    {
+        int value;
+        string? input;
+        do
+        {
+            Console.Write(prompt);
+            input = Console.ReadLine();
+        } while (!int.TryParse(input, out value) || !validation(value));
+
+        return value;
+    }
+
+    private List<int> ValidateListInput(string input, Func<string, bool> validation)
+    {
+        var validIds = new List<int>();
+        foreach (var id in input.Split(','))
+        {
+            if (validation(id.Trim()))
+            {
+                validIds.Add(int.Parse(id.Trim()));
+            }
+        }
+        return validIds;
+    }
+
+    private object? ValidateAndConvertInput(string input, Type targetType)
+    {
+        try
+        {
+            return Convert.ChangeType(input, targetType);
+        }
+        catch
+        {
+            Console.WriteLine($"Invalid input. Expected type: {targetType.Name}. Skipping this property.");
+            return null;
+        }
+    }
+}

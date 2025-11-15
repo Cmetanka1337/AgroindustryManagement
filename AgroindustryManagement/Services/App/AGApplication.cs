@@ -1,8 +1,9 @@
 using AgroindustryManagement.Views;
-using AgroindustryManagement.Models;
 using AgroindustryManagement.Services.App.Menu;
 using AgroindustryManagement.Services.App.Menu.MenuStateHandlers;
+using AgroindustryManagement.Services.Calculations;
 using AgroindustryManagement.Services.Database;
+using AgroindustryManagement.Services.Helpers;
 
 namespace AgroindustryManagement.Services.App;
 
@@ -10,13 +11,17 @@ public class AGApplication
 {
     private readonly AGMenu _menu = new ();
     public readonly AGViewService ViewService = new ();
-    private readonly AGDatabaseService _databaseService = new (context: Context);
-    private static readonly AGDatabaseContext Context = new (); // Temporarily located here. Should be moved later.
+    public readonly AGDatabaseService DatabaseService;
+    public readonly AGCalculationService CalculationService;
+    public readonly DataCollector DataCollector;
     private bool _isRunning;
     private readonly Dictionary<string, IAGMenuStateHandler> _stateHandlers;
 
-    public AGApplication()
+    public AGApplication(AGDatabaseService dbService)
     {
+        DatabaseService = dbService;
+        DataCollector = new DataCollector(dbService);
+        CalculationService = new AGCalculationService(dbService);
         _stateHandlers = new Dictionary<string, IAGMenuStateHandler>
         {
             { AGMenuState.MainMenuState, new MainMenuStateHandler(this) },
@@ -24,7 +29,9 @@ public class AGApplication
             { AGMenuState.MachineMenuState, new AGMachineMenuStateHandler(this) },
             { AGMenuState.InventoryItemMenuState, new AGInventoryItemMenuStateHandler(this) },
             { AGMenuState.WorkerMenuState, new AGWorkerMenuStateHandler(this) },
-            { AGMenuState.WorkerTaskMenuState, new AGWorkerTaskMenuStateHandler(this) }
+            { AGMenuState.WorkerTaskMenuState, new AGWorkerTaskMenuStateHandler(this) },
+            { AGMenuState.WarehouseMenuState, new AGWarehouseMenuStateHandler(this) },
+            { AGMenuState.ResourceMenuState, new AGResourceStateMenuHandler(this) }
         };
     }
 
