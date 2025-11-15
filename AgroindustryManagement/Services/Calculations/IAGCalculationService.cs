@@ -45,18 +45,18 @@ public interface IAGCalculationService
     /// </summary>
     decimal CalculateBonus(int workerId);
 
-    /// <summary>
-    /// Calculates the worker's efficiency coefficient.
-    /// </summary>
-    double CalculateWorkerEfficiency(double plannedWork, double completedWork, TimeSpan actualTime);
-
-    /// <summary>
-    /// Estimates the cost of all resources for a given field.
-    /// </summary>
-    double CalculateFieldCost(CultureType cropType, double areaInHectares);
-
-    /// <summary>
-    /// Calculates the projected profit considering costs and yield.
-    /// </summary>
-    double EstimateProfit(CultureType cropType, double areaInHectares, double marketPricePerTon);
+    // /// <summary>
+    // /// Calculates the worker's efficiency coefficient.
+    // /// </summary>
+    // double CalculateWorkerEfficiency(double plannedWork, double completedWork, TimeSpan actualTime);
+    //
+    // /// <summary>
+    // /// Estimates the cost of all resources for a given field.
+    // /// </summary>
+    // double CalculateFieldCost(CultureType cropType, double areaInHectares);
+    //
+    // /// <summary>
+    // /// Calculates the projected profit considering costs and yield.
+    // /// </summary>
+    // double EstimateProfit(CultureType cropType, double areaInHectares, double marketPricePerTon);
 }

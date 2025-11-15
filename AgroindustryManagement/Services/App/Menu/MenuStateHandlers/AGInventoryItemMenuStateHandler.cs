@@ -59,6 +59,7 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
     
     private void DeleteInventoryItem()
     {
+        DisplayAllInventoryItems();
         var itemId = App.ViewService.GetIntegerUserInputWithMessage("Enter Inventory Item Id");
         App.DatabaseService.DeleteInventoryItem(itemId);
     }

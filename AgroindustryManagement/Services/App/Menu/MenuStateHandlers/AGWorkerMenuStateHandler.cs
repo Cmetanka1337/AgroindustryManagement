@@ -31,6 +31,9 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
             case MenuOptions.WorkerOptions.AddWorker:
                 AddWorker();
                 break;
+            case MenuOptions.WorkerOptions.CalculateBonus:
+                CalculateBonus();
+                break;
             case MenuOptions.WorkerOptions.Back:
                 app.SetMenuState(AGMenuState.MainMenuState);
                 break;
@@ -59,6 +62,7 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
     
     private void DeleteWorker()
     {
+        DisplayAllWorkers();
         var workerId = App.ViewService.GetIntegerUserInputWithMessage("Enter Worker Id");
         App.DatabaseService.DeleteWorker(workerId);
     }
@@ -81,5 +85,13 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
         }
 
         return workerId;
+    }
+
+    private void CalculateBonus()
+    {
+        DisplayAllWorkers();
+        var id = GetWorkerId();
+        var bonus = App.CalculationService.CalculateBonus(id);
+        Console.WriteLine($"The calculated bonus for worker Id {id} is: {bonus}");
     }
 }

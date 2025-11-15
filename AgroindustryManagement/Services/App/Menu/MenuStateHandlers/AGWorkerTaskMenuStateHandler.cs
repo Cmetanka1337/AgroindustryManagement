@@ -30,6 +30,9 @@ public class AGWorkerTaskMenuStateHandler: IAGMenuStateHandler
             case MenuOptions.WorkerTaskOptions.AddWorkerTask:
                 AddWorkerTask();
                 break;
+            case MenuOptions.WorkerTaskOptions.RequiredWorkers:
+                RequiredWorkers();
+                break;
             case MenuOptions.WorkerTaskOptions.Back:
                 app.SetMenuState(AGMenuState.MainMenuState);
                 break;
@@ -85,4 +88,13 @@ public class AGWorkerTaskMenuStateHandler: IAGMenuStateHandler
 
         return workerTaskId;
     }
+    
+    private void RequiredWorkers()
+    {
+        DisplayAllWorkerTasks();
+        var id = GetWorkerTaskId();
+        var workerTask = App.DatabaseService.GetWorkerTaskById(id);
+        var requiredWorkers = App.CalculationService.CalculateRequiredWorkers(workerTask.Field.Culture, workerTask.Field.Area);
+        Console.WriteLine("Recommended number of workers: " + requiredWorkers);
+    } 
 }

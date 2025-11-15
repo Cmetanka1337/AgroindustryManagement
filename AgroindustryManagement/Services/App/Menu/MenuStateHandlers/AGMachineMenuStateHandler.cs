@@ -59,6 +59,7 @@ public class AGMachineMenuStateHandler: IAGMenuStateHandler
     
     private void DeleteMachine()
     {
+        DisplayAllMachines();
         var machineId = App.ViewService.GetIntegerUserInputWithMessage("Enter Machine Id");
         App.DatabaseService.DeleteMachine(machineId);
     }

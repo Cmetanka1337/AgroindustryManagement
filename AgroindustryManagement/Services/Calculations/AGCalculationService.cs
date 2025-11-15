@@ -5,7 +5,10 @@ namespace AgroindustryManagement.Services.Calculations;
 
 public class AGCalculationService : IAGCalculationService
 {
-    private readonly IAGDatabaseService _databaseService;
+    // Why CalculationService should have access to database? 
+    // CalculationService performs calculations rather than accessing the database
+    // All data required for calculations should be passed as parameters to its methods.
+    private readonly IAGDatabaseService _databaseService;  
     public AGCalculationService(IAGDatabaseService databaseService)
     {
         _databaseService = databaseService;
@@ -55,7 +58,7 @@ public class AGCalculationService : IAGCalculationService
         {
             throw new InvalidOperationException($"No resource found for crop type: {cropType}");
         }
-        return resource.Yield*areaInHectares;
+        return resource.Yield * areaInHectares;
     }
 
     public int CalculateRequiredMachineryCount(CultureType cropType, double areaInHectares)
@@ -115,61 +118,60 @@ public class AGCalculationService : IAGCalculationService
         {
             throw new InvalidOperationException($"No resource or machine are found");
         }
-        double duralityOfWorkerWork = (resource.WorkerWorkDuralityPerHectare/workersCount)*areaInHectares;
-        double duralityOfMachineWork = concreteMachine.WorkDuralityPerHectare*areaInHectares;
-        return duralityOfWorkerWork + duralityOfMachineWork;
+        double durationOfWorkerWork = resource.WorkerWorkDuralityPerHectare / workersCount * areaInHectares;
+        double durationOfMachineWork = concreteMachine.WorkDuralityPerHectare * areaInHectares;
+        return durationOfWorkerWork + durationOfMachineWork;
     }
 
     public decimal CalculateBonus(int workerId)
     {
-        if(workerId<=0)
+        if (workerId <= 0)
         { 
             throw new ArgumentOutOfRangeException("Worker id must be greater than zero. "); 
         }
         var tasks = _databaseService.GetTasksByWorkerId(workerId);
         decimal bonusPerDay = 0.02m;
         decimal sumOfBonuses = 0;
-        decimal bonus;
         foreach ( var task in tasks)
         {
             var differenceInDays=(task.EstimatesEndDate - task.RealEndDate).Days;
+            decimal bonus;
             if (differenceInDays<=0)
             {
-                bonus=0;
+                bonus = 0;
             }
             else
             {
                 bonus=differenceInDays*bonusPerDay;
             }
-            if(bonus>0.06m)
-                bonus=0.06m;
-            sumOfBonuses+=bonus;
+            if(bonus > 0.06m)
+                bonus = 0.06m;
+            sumOfBonuses += bonus;
         }
-        var worker=_databaseService.GetWorkerById(workerId);
+        var worker = _databaseService.GetWorkerById(workerId);
         if(worker==null)
         {
             throw new InvalidOperationException("Worker with such Id is not found");
         }
-        decimal salary;
-        salary=worker.HourlyRate*worker.HoursWorked;
-        decimal finalBonus = salary*sumOfBonuses;
-        return finalBonus;
+
+        var salary = worker.HourlyRate * worker.HoursWorked;
+        return salary * sumOfBonuses;
     }
 
     // UNIMPLEMENTED METHODS
     
-    public double CalculateWorkerEfficiency(double plannedWork, double completedWork, TimeSpan actualTime)
-    {
-        throw new NotImplementedException();
-    }
-    
-    public double CalculateFieldCost(CultureType cropType, double areaInHectares)
-    {
-        throw new NotImplementedException();
-    }
-    
-    public double EstimateProfit(CultureType cropType, double areaInHectares, double marketPricePerTon)
-    {
-        throw new NotImplementedException();
-    }
+    // public double CalculateWorkerEfficiency(double plannedWork, double completedWork, TimeSpan actualTime)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    // public double CalculateFieldCost(CultureType cropType, double areaInHectares)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    // public double EstimateProfit(CultureType cropType, double areaInHectares, double marketPricePerTon)
+    // {
+    //     throw new NotImplementedException();
+    // }
 }
