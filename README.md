@@ -63,6 +63,7 @@ The Agroindustry Management Application is a comprehensive tool designed to stre
 ---
 
 ## Project Structure
+```
 AgroindustryManagement/
 ├── Models/                      # Data models
 │   ├── Field.cs                 # Field model
@@ -95,8 +96,8 @@ AgroindustryManagement/
 │   └── ViewServiceTests/        # Tests for view rendering
 │
 ├── Program.cs                   # Application entry point
-└── README.md                    # Project documentation
-
+└── README.md                    # Project documentation`
+```
 ---
 
 ## How to Run
