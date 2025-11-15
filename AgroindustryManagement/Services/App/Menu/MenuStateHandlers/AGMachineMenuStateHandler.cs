@@ -38,7 +38,16 @@ public class AGMachineMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayMachine()
     {
-        var machineId = App.ViewService.GetIntegerUserInputWithMessage("Enter Machine Id");
+        // crashed here
+        var availableMachinesIds = App.DatabaseService.GetAllMachines().Select(machine => machine.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableMachinesIds);
+        
+        var machineId = -1;
+        while (!availableMachinesIds.Contains(machineId.ToString()))
+        {
+            machineId = App.ViewService.GetIntegerUserInputWithMessage("Enter Machine Id");
+        }
+        
         var machine = App.DatabaseService.GetMachineById(machineId);
         App.ViewService.DisplayMachineDetails(machine);
     }

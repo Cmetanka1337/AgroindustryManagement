@@ -39,7 +39,14 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayField()
     {
-        var fieldId = App.ViewService.GetIntegerUserInputWithMessage("Enter field Id");
+        var availableFieldsIds = App.DatabaseService.GetAllFields().Select(field => field.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableFieldsIds);
+        int fieldId = -1;
+        
+        while (!availableFieldsIds.Contains(fieldId.ToString()))
+        {
+            fieldId = App.ViewService.GetIntegerUserInputWithMessage("Enter field Id");
+        }
         var field = App.DatabaseService.GetFieldById(fieldId);
         App.ViewService.DisplayFieldDetails(field);
     }

@@ -38,7 +38,15 @@ public class AGWorkerTaskMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayWorkerTask()
     {
-        var workerTaskId = App.ViewService.GetIntegerUserInputWithMessage("Enter Worker Task Id");
+        var availableWorkerTasksIds = App.DatabaseService.GetAllWorkerTasks().Select(task => task.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableWorkerTasksIds);
+        
+        var workerTaskId = -1;
+        while (!availableWorkerTasksIds.Contains(workerTaskId.ToString()))
+        {
+            workerTaskId = App.ViewService.GetIntegerUserInputWithMessage("Enter Worker Task Id");
+        }
+        
         var workerTask = App.DatabaseService.GetWorkerTaskById(workerTaskId);
         App.ViewService.DisplayWorkerTaskDetails(workerTask);
     }

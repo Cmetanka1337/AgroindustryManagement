@@ -222,8 +222,9 @@ using AgroindustryManagement.Models;
             Console.WriteLine("===================================");
             Console.WriteLine($"ID:                {task.Id}");
             Console.WriteLine($"Description:       {task.Description}");
-            Console.WriteLine($"Worker ID:         {task.WorkerId}");
-            Console.WriteLine($"Field ID:          {task.FieldId}");
+            Console.WriteLine($"Worker ID:         {task.Worker.Id}");
+            Console.WriteLine($"Worker Name:       {task.Worker.FirstName}");
+            Console.WriteLine($"Field ID:          {task.Field.Id}");
             Console.WriteLine($"Task Type:         {task.TaskType}");
             Console.WriteLine($"Progress:          {task.Progress}%");
             Console.WriteLine($"Start Date:        {task.StartDate:yyyy-MM-dd}");
@@ -243,7 +244,7 @@ using AgroindustryManagement.Models;
 
             foreach (var task in tasks)
             {
-                Console.WriteLine($"| {task.Id,-5} | {task.Description,-20} | {task.WorkerId,-9} | {task.FieldId,-8} | {task.TaskType,-13} | {task.Progress,-8}% | {task.StartDate:yyyy-MM-dd} | {task.EstimatesEndDate:yyyy-MM-dd} |");
+                Console.WriteLine($"| {task.Id,-5} | {task.Description,-20} | {task.Worker.Id,-9} | {task.Field.Id,-8} | {task.TaskType,-13} | {task.Progress,-8}% | {task.StartDate:yyyy-MM-dd} | {task.EstimatesEndDate:yyyy-MM-dd} |");
             }
 
             Console.WriteLine("==================================================================================================");
@@ -275,6 +276,15 @@ using AgroindustryManagement.Models;
         /// </summary>
         /// <param name="report">The summary report to display.</param>
         public void DisplaySummaryReport(string report) { }
+
+        public void DisplayIds(string[] ids)
+        {
+            foreach (var id in ids)
+            {
+                Console.Write($"{id}; ");
+            }
+            Console.WriteLine();
+        }
         
         // USER INPUT
 

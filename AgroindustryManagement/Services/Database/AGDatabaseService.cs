@@ -324,8 +324,6 @@ public class AGDatabaseService : IAGDatabaseService
         }
         
         existingWorkerTask.Worker = task.Worker;
-        existingWorkerTask.WorkerId = task.WorkerId;
-        existingWorkerTask.FieldId = task.FieldId;
         existingWorkerTask.Field = task.Field;
         existingWorkerTask.Description = task.Description;
         existingWorkerTask.EstimatesEndDate = task.EstimatesEndDate;
@@ -393,7 +391,7 @@ public class AGDatabaseService : IAGDatabaseService
         {
             throw new ArgumentException("Id must be positive", nameof(workerId));
         }
-        var tasksById = _context.WorkerTasks.Where(workerTask => workerTask.WorkerId == workerId).ToList();
+        var tasksById = _context.WorkerTasks.Where(workerTask => workerTask.Worker.Id == workerId).ToList();
 
         return tasksById.Count == 0 ? Enumerable.Empty<WorkerTask>() : tasksById;
     }

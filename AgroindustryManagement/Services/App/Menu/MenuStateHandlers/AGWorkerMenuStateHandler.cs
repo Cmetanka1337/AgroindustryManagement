@@ -39,7 +39,15 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayWorker()
     {
-        var workerId = App.ViewService.GetIntegerUserInputWithMessage("Enter Worker Id");
+        var availableWorkersIds = App.DatabaseService.GetAllWorkers().Select(worker => worker.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableWorkersIds);
+        
+        var workerId = -1;
+        while (!availableWorkersIds.Contains(workerId.ToString()))
+        {
+            workerId = App.ViewService.GetIntegerUserInputWithMessage("Enter Worker Id");
+        }
+        
         var worker = App.DatabaseService.GetWorkerById(workerId);
         App.ViewService.DisplayWorkerDetails(worker);
     }

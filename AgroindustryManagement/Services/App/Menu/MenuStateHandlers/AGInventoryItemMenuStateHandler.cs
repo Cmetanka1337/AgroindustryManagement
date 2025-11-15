@@ -39,7 +39,15 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayInventoryItem()
     {
-        var itemId = App.ViewService.GetIntegerUserInputWithMessage("Enter Inventory Item Id");
+        var availableItemsIds = App.DatabaseService.GetAllInventoryItems().Select(item => item.Id.ToString()).ToArray();
+        App.ViewService.DisplayIds(availableItemsIds);
+        
+        var itemId = -1;
+        while (!availableItemsIds.Contains(itemId.ToString()))
+        {
+            itemId = App.ViewService.GetIntegerUserInputWithMessage("Enter Inventory Item Id");
+        }
+        
         var item = App.DatabaseService.GetInventoryItemById(itemId);
         App.ViewService.DisplayInventoryItemDetails(item);
     }
