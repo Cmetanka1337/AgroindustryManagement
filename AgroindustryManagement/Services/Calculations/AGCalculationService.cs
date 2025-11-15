@@ -138,7 +138,7 @@ public class AGCalculationService : IAGCalculationService
         salary=worker.HourlyRate*worker.HoursWorked;
         var tasks = _databaseService.GetTasksByWorkerId(workerId);
         decimal bonusPerDay = 0.02m;
-        decimal sumOfBonuses = 0;
+        decimal sumOfBonuses = 1;
         foreach ( var task in tasks)
         {
             var differenceInDays=(task.EstimatesEndDate - task.RealEndDate).Days;
@@ -158,13 +158,13 @@ public class AGCalculationService : IAGCalculationService
                 bonus = 0.06m;
             sumOfBonuses += bonus;
         }
-        var worker = _databaseService.GetWorkerById(workerId);
+        worker = _databaseService.GetWorkerById(workerId);
         if(worker==null)
         {
             throw new InvalidOperationException("Worker with such Id is not found");
         }
 
-        var salary = worker.HourlyRate * worker.HoursWorked;
+        salary = worker.HourlyRate * worker.HoursWorked;
         return salary * sumOfBonuses;
     }
 

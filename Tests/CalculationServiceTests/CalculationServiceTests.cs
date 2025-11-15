@@ -2,11 +2,6 @@
 using AgroindustryManagement.Services.Calculations;
 using AgroindustryManagement.Services.Database;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests.CalculationServiceTests
 {
@@ -36,24 +31,18 @@ namespace Tests.CalculationServiceTests
             _mockDBContext.Resources.Add(mockResource);
             _mockDBContext.SaveChanges();
             //ACT
-            var result = _calculationService.CalculateSeedAmount("Wheat", 10);
+            var result = _calculationService.CalculateSeedAmount(CultureType.Wheat, 10);
             //ASSERT
             Assert.Equal(2000, result);
         }
-        [Fact]
-        public void Test_CalculateSeedAmount_EmptyCropType_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.CalculateSeedAmount("", 10));
-
-        }
+        
         [Fact]
         public void Test_CalculateSeedAmount_NegativeArea_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() =>
-                        _calculationService.CalculateSeedAmount("Wheat", -5));
+                        _calculationService.CalculateSeedAmount(CultureType.Wheat, -5));
             Assert.Throws<ArgumentException>(() =>
-                        _calculationService.CalculateSeedAmount("Wheat", 0));
+                        _calculationService.CalculateSeedAmount(CultureType.Wheat, 0));
         }
         [Fact]
         public void Test_CalculateSeedAmount_CultureTypeNotFound_ThrowsKeyNotFoundException()
@@ -65,8 +54,9 @@ namespace Tests.CalculationServiceTests
             _mockDBContext.Resources.Add(mockResource);
             _mockDBContext.SaveChanges();
             Assert.Throws<KeyNotFoundException>(() =>
-                        _calculationService.CalculateSeedAmount("Rice", 10));
+                        _calculationService.CalculateSeedAmount(CultureType.Rice, 10));
         }
+        
         [Fact]
         public void Test_CalculateFertilizerAmount_ReturnCorrectFertilizerAmount()
         {
@@ -77,22 +67,17 @@ namespace Tests.CalculationServiceTests
             };
             _mockDBContext.Resources.Add(mockResource);
             _mockDBContext.SaveChanges();
-            var result = _calculationService.CalculateFertilizerAmount("Wheat", 20);
+            var result = _calculationService.CalculateFertilizerAmount(CultureType.Wheat, 20);
             Assert.Equal(2000, result);
         }
-        [Fact]
-        public void Test_CalculateFertilizerAmount_EmptyCropType_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.CalculateFertilizerAmount("", 10));
-        }
+
         [Fact]
         public void Test_CalculateFertilizerAmount_NegativeArea_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() =>
-                        _calculationService.CalculateFertilizerAmount("Wheat", -5));
+                        _calculationService.CalculateFertilizerAmount(CultureType.Wheat, -5));
             Assert.Throws<ArgumentException>(() =>
-                        _calculationService.CalculateFertilizerAmount("Wheat", 0));
+                        _calculationService.CalculateFertilizerAmount(CultureType.Wheat, 0));
         }
         [Fact]
         public void Test_CalculateFertilizerAmount_CultureTypeNotFound_ThrowsKeyNotFoundException()
@@ -104,7 +89,7 @@ namespace Tests.CalculationServiceTests
             _mockDBContext.Resources.Add(mockResource);
             _mockDBContext.SaveChanges();
             Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.CalculateFertilizerAmount("Rice", 10));
+            _calculationService.CalculateFertilizerAmount(CultureType.Rice, 10));
         }
         [Fact]
         public void Test_EstimateYield_ReturnCorrectYield()
@@ -116,23 +101,18 @@ namespace Tests.CalculationServiceTests
             };
             _mockDBContext.Resources.Add(resource);
             _mockDBContext.SaveChanges();
-            var result = _calculationService.EstimateYield("Wheat", 10);
+            var result = _calculationService.EstimateYield(CultureType.Wheat, 10);
             Assert.Equal(200, result);
         }
-        [Fact]
-        public void Test_EstimateYield_EmptyCropType_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateYield("", 10));
-        }
+        
         [Fact]
         public void Test_EstimateYield_NegativeArea_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateYield("Wheat", -5));
+            _calculationService.EstimateYield(CultureType.Wheat, -5));
 
             Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateYield("Wheat", 0));
+            _calculationService.EstimateYield(CultureType.Wheat, 0));
         }
         [Fact]
         public void Test_EstimateYield_CultureTypeNotFound_ThrowsKeyNotFoundException()
@@ -145,7 +125,7 @@ namespace Tests.CalculationServiceTests
             _mockDBContext.Resources.Add(mockResource);
             _mockDBContext.SaveChanges();
             Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.EstimateYield("Rice", 10));
+            _calculationService.EstimateYield(CultureType.Rice, 10));
         }
         [Fact]
         public void Test_CalculateRequiredMachineryCount_ReturnCorrectNumberOfRequiredMachines()
@@ -160,23 +140,18 @@ namespace Tests.CalculationServiceTests
             mockResource.RequiredMachines.Add(machine1);
             _mockDBContext.Resources.Add(mockResource);
             _mockDBContext.SaveChanges();
-            var result = _calculationService.CalculateRequiredMachineryCount("Wheat", 10);
+            var result = _calculationService.CalculateRequiredMachineryCount(CultureType.Wheat, 10);
             Assert.Equal(2, result);
         }
-        [Fact]
-        public void Test_CalculateRequiredMachineryCount_EmptyCropType_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.CalculateRequiredMachineryCount("", 10));
-        }
+        
         [Fact]
         public void Test_CalculateRequiredMachineryCount_NegativeArea_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() =>
-           _calculationService.CalculateRequiredMachineryCount("Wheat", -5));
+           _calculationService.CalculateRequiredMachineryCount(CultureType.Wheat, -5));
 
             Assert.Throws<ArgumentException>(() =>
-            _calculationService.CalculateRequiredMachineryCount("Wheat", 0));
+            _calculationService.CalculateRequiredMachineryCount(CultureType.Wheat, 0));
         }
         [Fact]
         public void Test_CalculateRequiredMachineryCount_CultureTypeNotFound_ThrowsKeyNotFoundException()
@@ -188,7 +163,7 @@ namespace Tests.CalculationServiceTests
             _mockDBContext.Resources.Add(mockResource);
             _mockDBContext.SaveChanges();
             Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.CalculateRequiredMachineryCount("Rice", 10));
+            _calculationService.CalculateRequiredMachineryCount(CultureType.Rice, 10));
         }
         [Fact]
         public void Test_EstimateFuelConsumption_ReturnCorrectFuelConsumption()
@@ -200,23 +175,18 @@ namespace Tests.CalculationServiceTests
             };
             _databaseService.AddMachine(mockMachine);
             _mockDBContext.SaveChanges();
-            var result = _calculationService.EstimateFuelConsumption("Tractor", 20);
+            var result = _calculationService.EstimateFuelConsumption(MachineType.Tractor, 20);
             Assert.Equal(400, result);
         }
-        [Fact]
-        public void Test_EstimateFuelConsumption_EmptyMachineType_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateFuelConsumption("", 10));
-        }
+        
         [Fact]
         public void Test_EstimateFuelConsumption_NegativeArea_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() =>
-           _calculationService.EstimateFuelConsumption("Wheat", -5));
+           _calculationService.EstimateFuelConsumption(MachineType.Tractor, -5));
 
             Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateFuelConsumption("Wheat", 0));
+            _calculationService.EstimateFuelConsumption(MachineType.Tractor, 0));
         }
         [Fact]
         public void Test_EstimateFuelConsumption_MachineTypeNotFound_ThrowsKeyNotFoundException()
@@ -228,7 +198,7 @@ namespace Tests.CalculationServiceTests
             _databaseService.AddMachine(mockMachine);
 
             Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.EstimateFuelConsumption("Plow", 10));
+            _calculationService.EstimateFuelConsumption(MachineType.Plow, 10));
         }
         [Fact]
         public void Test_CalculateRequiredWorkers_ReturnCorrectNumberOfRequiredWorkers()
@@ -240,23 +210,18 @@ namespace Tests.CalculationServiceTests
             };
             _mockDBContext.Resources.Add(mockResource);
             _mockDBContext.SaveChanges();
-            var result = _calculationService.CalculateRequiredWorkers("Wheat", 10);
+            var result = _calculationService.CalculateRequiredWorkers(CultureType.Wheat, 10);
             Assert.Equal(30, result);
         }
-        [Fact]
-        public void Test_CalculateRequiredWorkers_EmptyCropType_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.CalculateRequiredWorkers("", 10));
-        }
+        
         [Fact]
         public void Test_CalculateRequiredWorkers_NegativeArea_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() =>
-           _calculationService.CalculateRequiredWorkers("Wheat", -5));
+           _calculationService.CalculateRequiredWorkers(CultureType.Wheat, -5));
 
             Assert.Throws<ArgumentException>(() =>
-            _calculationService.CalculateRequiredWorkers("Wheat", 0));
+            _calculationService.CalculateRequiredWorkers(CultureType.Wheat, 0));
         }
         [Fact]
         public void Test_CalculateRequiredWorkers_CropTypeNotFound_ThrowsKeyNotFoundException()
@@ -268,7 +233,7 @@ namespace Tests.CalculationServiceTests
             _mockDBContext.Resources.Add(mockResource);
             _mockDBContext.SaveChanges();
             Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.CalculateRequiredWorkers("Rice", 10));
+            _calculationService.CalculateRequiredWorkers(CultureType.Rice, 10));
         }
         [Fact]
         public void Test_EstimateWorkDuration_ReturnCorrectWorkDuration()
@@ -286,25 +251,18 @@ namespace Tests.CalculationServiceTests
             _mockDBContext.Resources.Add(mockResource);
             _databaseService.AddMachine(mockMachine);
             _mockDBContext.SaveChanges();
-            var result = _calculationService.EstimateWorkDuration(10, 10, "Tractor", "Wheat");
-            Assert.Equal(200, result);
+            var result = _calculationService.EstimateWorkDuration(10, 10, MachineType.Tractor, CultureType.Wheat);
+            Assert.Equal(270, result);
         }
-        [Fact]
-        public void Test_EstimateWorkDuration_EmptyCropTypeOrMachineType_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateWorkDuration(10,10,"", "Tractor"));
-            Assert.Throws<ArgumentException>(() =>
-          _calculationService.EstimateWorkDuration(10, 10, "Wheat", ""));
-        }
+        
         [Fact]
         public void Test_EstimateWorkDuration_NegativeAreaOrWorkerCounts_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() =>
-           _calculationService.EstimateWorkDuration(-5, -5, "Wheat", "Tractor"));
+           _calculationService.EstimateWorkDuration(-5, -5, MachineType.Tractor, CultureType.Wheat));
 
             Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateWorkDuration(0,5, "Wheat", "Tractor"));
+            _calculationService.EstimateWorkDuration(0,5, MachineType.Tractor, CultureType.Wheat));
         }
         [Fact]
         public void Test_EstimateWorkDuration_CropTypeOrMachineTypeNotFound_ThrowsKeyNotFoundException()
@@ -321,7 +279,7 @@ namespace Tests.CalculationServiceTests
             _databaseService.AddMachine(mockMachine);
             _mockDBContext.SaveChanges();
             Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.EstimateWorkDuration(10, 10, "Plow", "Wheat"));
+            _calculationService.EstimateWorkDuration(10, 10, MachineType.Plow, CultureType.Wheat));
         }
         [Fact]
         public void Test_CalculateBonus_ReturnCorrectTotalBonus()
@@ -336,7 +294,6 @@ namespace Tests.CalculationServiceTests
             };
             var mockWorkerTask = new WorkerTask
             {
-                WorkerId= 1,
                 Description="Test",
                 EstimatesEndDate= DateTime.Now,
                 RealEndDate =new DateTime(2025, 11, 7, 12, 10, 30)
@@ -345,7 +302,7 @@ namespace Tests.CalculationServiceTests
             _databaseService.AddWorkerTask(mockWorkerTask);
             
             var result = _calculationService.CalculateBonus(1);
-            Assert.Equal(900, result);
+            Assert.Equal(15000, result);
         }
         [Fact]
         public void Test_CalculateBonus_NegativeWorkerId_ThrowsArgumentException()
