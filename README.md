@@ -63,7 +63,39 @@ The Agroindustry Management Application is a comprehensive tool designed to stre
 ---
 
 ## Project Structure
-AgroindustryManagement/ ├── Models/ # Data models │ ├── Field.cs # Field model │ ├── Worker.cs # Worker model │ ├── WorkerTask.cs # Worker task model │ ├── Resource.cs # Resource model │ ├── Machine.cs # Machine model │ ├── InventoryItem.cs # Inventory item model │ └── Enums/ # Enums for various types │ ├── MachineType.cs # Machine type enum │ └── TaskType.cs # Task type enum ├── Data/ # Database context and services │ ├── AgroDbContext.cs # EF Core DbContext │ ├── DatabaseInitializer.cs # Seed data initializer │ └── AGDatabaseService.cs # Database service for CRUD operations ├── Services/ # Business logic and calculations │ ├── CalculationService.cs # Calculation logic for various operations │ ├── DataCollector.cs # Universal data collection logic │ ├── ViewService.cs # Handles user interface rendering │ └── Menu/ # Menu state handlers │ ├── AGFieldMenuStateHandler.cs # Field menu handler │ ├── AGWorkerMenuStateHandler.cs # Worker menu handler │ └── AGTaskMenuStateHandler.cs # Task menu handler ├── Tests/ # Unit tests │ ├── DatabaseServiceTests/ # Tests for database services │ ├── CalculationServiceTests/ # Tests for calculation services │ └── ViewServiceTests/ # Tests for view rendering ├── Program.cs # Application entry point └── README.md # Project documentation
+AgroindustryManagement/
+├── Models/                      # Data models
+│   ├── Field.cs                 # Field model
+│   ├── Worker.cs                # Worker model
+│   ├── WorkerTask.cs            # Worker task model
+│   ├── Resource.cs              # Resource model
+│   ├── Machine.cs               # Machine model
+│   ├── InventoryItem.cs         # Inventory item model
+│   └── Enums/                   # Enums for various types
+│       ├── MachineType.cs       # Machine type enum
+│       └── TaskType.cs          # Task type enum
+│
+├── Data/                        # Database context and services
+│   ├── AgroDbContext.cs         # EF Core DbContext
+│   ├── DatabaseInitializer.cs   # Seed data initializer
+│   └── AGDatabaseService.cs     # Database service for CRUD operations
+│
+├── Services/                    # Business logic and calculations
+│   ├── CalculationService.cs    # Calculation logic for various operations
+│   ├── DataCollector.cs         # Universal data collection logic
+│   ├── ViewService.cs           # Handles user interface rendering
+│   └── Menu/                    # Menu state handlers
+│       ├── AGFieldMenuStateHandler.cs   # Field menu handler
+│       ├── AGWorkerMenuStateHandler.cs  # Worker menu handler
+│       └── AGTaskMenuStateHandler.cs    # Task menu handler
+│
+├── Tests/                       # Unit tests
+│   ├── DatabaseServiceTests/    # Tests for database services
+│   ├── CalculationServiceTests/ # Tests for calculation services
+│   └── ViewServiceTests/        # Tests for view rendering
+│
+├── Program.cs                   # Application entry point
+└── README.md                    # Project documentation
 
 ---
 
