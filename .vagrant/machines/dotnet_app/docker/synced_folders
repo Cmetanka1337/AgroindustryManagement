@@ -1,0 +1,1 @@
+{"docker":{"/app":{"guestpath":"/app","hostpath":"/Users/vsevolodburtik/KPP/AgroindustryManagement/publish","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/vsevolodburtik/KPP/AgroindustryManagement","disabled":false,"__vagrantfile":true}}}
