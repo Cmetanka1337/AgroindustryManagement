@@ -17,14 +17,14 @@ public class AGCalculationService : IAGCalculationService
     {
         if (areaInHectares <= 0)
         {
-            throw new ArgumentException("Area in hectares must be greater than zero.");
+            return -1;
         }
         
         var resource = _databaseService.GetResourceByCultureType(cropType);
 
         if (resource == null)
         {
-            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
+            return -1;
         }
 
         var seedAmount = resource.SeedPerHectare * areaInHectares;
@@ -36,12 +36,12 @@ public class AGCalculationService : IAGCalculationService
     {
         if (areaInHectares <= 0)
         {
-            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            return -1;
         }
         var resource = _databaseService.GetResourceByCultureType(cropType);
         if (resource == null)
         {
-            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
+            return -1;
         }
         return resource.FertilizerPerHectare*areaInHectares;
     }
@@ -50,13 +50,13 @@ public class AGCalculationService : IAGCalculationService
     {
         if (areaInHectares <= 0)
         {
-            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            return -1;
         }
 
         var resource = _databaseService.GetResourceByCultureType(cropType);
         if(resource == null)
         {
-            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
+            return -1;
         }
         return resource.Yield * areaInHectares;
     }
@@ -65,14 +65,14 @@ public class AGCalculationService : IAGCalculationService
     {
         if (areaInHectares <= 0)
         {
-            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            return -1;
         }
 
         var resource = _databaseService.GetResourceByCultureType(cropType);
 
         if (resource == null)
         {
-            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
+            return -1;
         }
 
         return resource.RequiredMachines.Count;
@@ -82,7 +82,7 @@ public class AGCalculationService : IAGCalculationService
     {
         if (areaInHectares <= 0)
         {
-            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            return -1;
         }
         var concreteMachine=_databaseService.GetMachineByMachineType(machineType);
         return concreteMachine.FuelConsumption * areaInHectares;
@@ -93,7 +93,7 @@ public class AGCalculationService : IAGCalculationService
     {
         if (areaInHectares <= 0)
         {
-            throw new ArgumentException(nameof(areaInHectares), "Area in hectares must be greater than zero.");
+            return -1;
         }
 
         var resource = _databaseService.GetResourceByCultureType(cropType);
@@ -110,13 +110,13 @@ public class AGCalculationService : IAGCalculationService
     {
         if (areaInHectares <= 0 || workersCount<=0)
         { 
-            throw new ArgumentException("Area in hectares and workers count must be greater than zero.");
+            return -1;
         }
         var resource = _databaseService.GetResourceByCultureType(cropType);
         var concreteMachine = _databaseService.GetMachineByMachineType(machineryType);
         if(resource == null || concreteMachine==null)
         {
-            throw new KeyNotFoundException($"No machine are found");
+            return -1;
         }
         double durationOfWorkerWork = resource.WorkerWorkDuralityPerHectare / workersCount * areaInHectares;
         double durationOfMachineWork = concreteMachine.WorkDuralityPerHectare * areaInHectares;
@@ -127,18 +127,18 @@ public class AGCalculationService : IAGCalculationService
     {
         if (workerId <= 0)
         { 
-            throw new ArgumentException("Worker id must be greater than zero. "); 
+            return -1; 
         }
         var worker = _databaseService.GetWorkerById(workerId);
         if (worker==null)
         {
-            throw new KeyNotFoundException("Worker with such Id is not found");
+            return -1;
         }
         decimal salary;
         salary=worker.HourlyRate*worker.HoursWorked;
         var tasks = _databaseService.GetTasksByWorkerId(workerId);
         decimal bonusPerDay = 0.02m;
-        decimal sumOfBonuses = 1;
+        decimal sumOfBonuses = (decimal)0.1;
         foreach ( var task in tasks)
         {
             var differenceInDays=(task.EstimatesEndDate - task.RealEndDate).Days;
@@ -161,7 +161,7 @@ public class AGCalculationService : IAGCalculationService
         worker = _databaseService.GetWorkerById(workerId);
         if(worker==null)
         {
-            throw new InvalidOperationException("Worker with such Id is not found");
+            return -1;
         }
 
         salary = worker.HourlyRate * worker.HoursWorked;

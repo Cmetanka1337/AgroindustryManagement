@@ -57,8 +57,13 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayField()
     {
-        var field = App.DatabaseService.GetFieldById(GetFieldId());
-        App.ViewService.DisplayFieldDetails(field);
+            var field = App.DatabaseService.GetFieldById(GetFieldId());
+            if (field != null)
+            {
+                App.ViewService.DisplayFieldDetails(field);
+                return;
+            }
+            Console.WriteLine("Field not found.");
     }
 
     private void DisplayAllFields()
@@ -78,6 +83,11 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
         DisplayAllFields();
         var id = GetFieldId();
         var existingField = App.DatabaseService.GetFieldById(id);
+        if (existingField == null)
+        {
+            Console.WriteLine("Field not found.");
+            return;
+        }
         var updatedField = App.DataCollector.EditData(existingField);
         App.DatabaseService.UpdateField(updatedField);
     }
@@ -108,8 +118,14 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
         DisplayAllFields();
         var id = GetFieldId();
         var field = App.DatabaseService.GetFieldById(id);
+        if (field == null)
+        {
+            Console.WriteLine("Field not found.");
+            return;
+        }
         var fertilizerAmount = App.CalculationService.CalculateFertilizerAmount(field.Culture, field.Area);
-        Console.WriteLine("Recommended fertilizer amount: " + fertilizerAmount + " kg");
+        var message = fertilizerAmount >= 0 ? $"Recommended fertilizer amount: {fertilizerAmount} kg" : "Error occured during calculation. Check your data";
+        Console.WriteLine(message);
     }
 
     private void SeedAmount()
@@ -117,8 +133,14 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
         DisplayAllFields();
         var id = GetFieldId();
         var field = App.DatabaseService.GetFieldById(id);
+        if (field == null)
+        {
+            Console.WriteLine("Field not found");
+            return;
+        }
         var seedAmount = App.CalculationService.CalculateSeedAmount(field.Culture, field.Area);
-        Console.WriteLine("Recommended seed amount: " + seedAmount + " kg");
+        var message = seedAmount >= 0 ? $"Recommended seed amount: {seedAmount} kg" : "Error occured during calculation. Check your data";
+        Console.WriteLine(message);
     }
     
     private void EstimatedYield()
@@ -126,8 +148,14 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
         DisplayAllFields();
         var id = GetFieldId();
         var field = App.DatabaseService.GetFieldById(id);
+        if (field == null)
+        {
+            Console.WriteLine("Field not found");
+            return;
+        }
         var estimatedYield = App.CalculationService.EstimateYield(field.Culture, field.Area);
-        Console.WriteLine("Estimated yield: " + estimatedYield + " tons");
+        var message = estimatedYield >= 0 ? $"Estimated yield: {estimatedYield} tons" : "Error occured during calculation. Check your data";
+        Console.WriteLine(message);
     }
 
     private void FuelConsumption()
@@ -135,10 +163,16 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
         DisplayAllFields();
         var id = GetFieldId();
         var field = App.DatabaseService.GetFieldById(id);
+        if (field == null)
+        {
+            Console.WriteLine("Field not found");
+            return;
+        }
         field.Machines.ForEach(machine =>
         {
             var fuelConsumption = App.CalculationService.EstimateFuelConsumption(machine.Type, field.Area);
-            Console.WriteLine($"Estimated fuel consumption for {machine.Type.ToString()}: " + fuelConsumption + " liters");
+            var message = fuelConsumption >= 0 ? $"Estimated fuel consumption for {machine.Type.ToString()}: {fuelConsumption} liters" : "Error occured during calculation. Check your data";
+            Console.WriteLine(message);
         });
     }
 
@@ -147,8 +181,14 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
         DisplayAllFields();
         var id = GetFieldId();
         var field = App.DatabaseService.GetFieldById(id);
+        if (field == null)
+        {
+            Console.WriteLine("Field not found");
+            return;
+        }
         var machineryCount = App.CalculationService.CalculateRequiredMachineryCount(field.Culture, field.Area);
-        Console.WriteLine("Required machinery count: " + machineryCount);
+        var message = machineryCount >= 0 ? $"Required machinery count: {machineryCount}" : "Error occured during calculation. Check your data";
+        Console.WriteLine(message);
     }
     
     private void EstimateWorkDuration()
@@ -156,7 +196,14 @@ public class AGFieldMenuStateHandler: IAGMenuStateHandler
         DisplayAllFields();
         var id = GetFieldId();
         var field = App.DatabaseService.GetFieldById(id);
+        if (field == null)
+        {
+            Console.WriteLine("Field not found.");
+            return;
+        }
+        
         var workersCount = App.CalculationService.EstimateWorkDuration(field.Area, field.Machines.Count, field.Machines[0].Type, field.Culture);
-        Console.WriteLine("Estimated work duration (in hours): " + workersCount);
+        var message = workersCount >= 0 ? $"Estimated work duration (in hours): {workersCount}" : "Error occured during calculation. Check your data";
+        Console.WriteLine(message);
     }
 }

@@ -14,7 +14,7 @@ public interface IAGDatabaseService
     /// </summary>
     /// <param name="fieldId">The unique identifier of the field.</param>
     /// <returns>The field with the specified ID.</returns>
-    Field GetFieldById(int fieldId);
+    Field? GetFieldById(int fieldId);
 
     /// <summary>
     /// Retrieves all fields.
@@ -47,7 +47,7 @@ public interface IAGDatabaseService
     /// </summary>
     /// <param name="workerId">The unique identifier of the worker.</param>
     /// <returns>The worker with the specified ID.</returns>
-    Worker GetWorkerById(int workerId);
+    Worker? GetWorkerById(int workerId);
 
     /// <summary>
     /// Retrieves all workers.
@@ -81,7 +81,7 @@ public interface IAGDatabaseService
     /// </summary>
     /// <param name="machineId">The unique identifier of the machine.</param>
     /// <returns>The machine with the specified ID.</returns>
-    Machine GetMachineById(int machineId);
+    Machine? GetMachineById(int machineId);
 
     /// <summary>
     /// Retrieves all machines.
@@ -114,7 +114,7 @@ public interface IAGDatabaseService
     /// </summary>
     /// <param name="itemId">The unique identifier of the inventory item.</param>
     /// <returns>The inventory item with the specified ID.</returns>
-    InventoryItem GetInventoryItemById(int itemId);
+    InventoryItem? GetInventoryItemById(int itemId);
 
     /// <summary>
     /// Retrieves all inventory items.
@@ -147,7 +147,7 @@ public interface IAGDatabaseService
     /// </summary>
     /// <param name="taskId">The unique identifier of the worker task.</param>
     /// <returns>The worker task with the specified ID.</returns>
-    WorkerTask GetWorkerTaskById(int taskId);
+    WorkerTask? GetWorkerTaskById(int taskId);
 
     /// <summary>
     /// Retrieves all worker tasks.
@@ -175,8 +175,8 @@ public interface IAGDatabaseService
     #endregion
     
     // Additional utility methods
-    Resource GetResourceByCultureType(CultureType cultureType);
-    Machine GetMachineByMachineType(MachineType machineType);
+    Resource? GetResourceByCultureType(CultureType cultureType);
+    Machine? GetMachineByMachineType(MachineType machineType);
     /// <summary>
     /// Retrieves inventory items that are critically low in stock.
     /// </summary>
