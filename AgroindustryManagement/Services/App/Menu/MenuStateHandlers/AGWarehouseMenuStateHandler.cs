@@ -38,6 +38,12 @@ public class AGWarehouseMenuStateHandler: IAGMenuStateHandler
     private void DisplayWarehouse()
     {
         var warehouse = App.DatabaseService.GetWarehouseById(GetWarehouseId());
+        if (warehouse == null)
+        {
+            Console.WriteLine("Warehouse not found.");
+            return;
+        }
+        
         App.ViewService.DisplayWarehouseDetails(warehouse);
     }
     
@@ -57,6 +63,12 @@ public class AGWarehouseMenuStateHandler: IAGMenuStateHandler
         DisplayAllWarehouses();
         var id = GetWarehouseId();
         var warehouse = App.DatabaseService.GetWarehouseById(id);
+        if (warehouse == null)
+        {
+            Console.WriteLine("Warehouse not found.");
+            return;
+        }
+        
         App.ViewService.DisplayWarehouseDetails(warehouse);
         var updatedWarehouse = App.DataCollector.EditData(warehouse);
         App.DatabaseService.UpdateWarehouse(updatedWarehouse);

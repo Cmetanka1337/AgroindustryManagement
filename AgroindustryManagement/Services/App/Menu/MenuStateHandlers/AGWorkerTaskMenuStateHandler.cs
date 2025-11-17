@@ -42,6 +42,12 @@ public class AGWorkerTaskMenuStateHandler: IAGMenuStateHandler
     private void DisplayWorkerTask()
     {
         var workerTask = App.DatabaseService.GetWorkerTaskById(GetWorkerTaskId());
+        if (workerTask == null)
+        {
+            Console.WriteLine("Worker Task not found.");
+            return;
+        }
+        
         App.ViewService.DisplayWorkerTaskDetails(workerTask);
     }
     
@@ -55,6 +61,12 @@ public class AGWorkerTaskMenuStateHandler: IAGMenuStateHandler
         DisplayAllWorkerTasks();
         var id = GetWorkerTaskId();
         var existingWorkerTask = App.DatabaseService.GetWorkerTaskById(id);
+        if (existingWorkerTask == null)
+        {
+            Console.WriteLine("Worker Task not found.");
+            return;
+        }
+        
         var updatedWorkerTask = App.DataCollector.EditData(existingWorkerTask);
         App.DatabaseService.UpdateWorkerTask(updatedWorkerTask);
     }
@@ -94,7 +106,14 @@ public class AGWorkerTaskMenuStateHandler: IAGMenuStateHandler
         DisplayAllWorkerTasks();
         var id = GetWorkerTaskId();
         var workerTask = App.DatabaseService.GetWorkerTaskById(id);
+        if (workerTask == null)
+        {
+            Console.WriteLine("Worker Task not found.");
+            return;
+        }
+        
         var requiredWorkers = App.CalculationService.CalculateRequiredWorkers(workerTask.Field.Culture, workerTask.Field.Area);
-        Console.WriteLine("Recommended number of workers: " + requiredWorkers);
+        var message = requiredWorkers <= 0 ? $"Recommended number of workers: {requiredWorkers}" : "Error occured during calculation. Check your data";
+        Console.WriteLine(message);
     } 
 }

@@ -43,6 +43,8 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
     private void DisplayWorker()
     {
         var worker = App.DatabaseService.GetWorkerById(GetWorkerId());
+        
+        
         App.ViewService.DisplayWorkerDetails(worker);
     }
     
@@ -56,6 +58,12 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
         DisplayAllWorkers();
         var id = GetWorkerId();
         var existingWorker = App.DatabaseService.GetWorkerById(id);
+        if (existingWorker == null)
+        {
+            Console.WriteLine("Worker not found.");
+            return;
+        }
+        
         var updatedWorker = App.DataCollector.EditData(existingWorker);
         App.DatabaseService.UpdateWorker(updatedWorker);
     }
@@ -92,6 +100,7 @@ public class AGWorkerMenuStateHandler: IAGMenuStateHandler
         DisplayAllWorkers();
         var id = GetWorkerId();
         var bonus = App.CalculationService.CalculateBonus(id);
-        Console.WriteLine($"The calculated bonus for worker Id {id} is: {bonus}");
+        var message = bonus < 0 ? "Error occured. Check your data" : $"The calculated bonus for worker Id {id} is: {bonus}";
+        Console.WriteLine(message);
     }
 }
