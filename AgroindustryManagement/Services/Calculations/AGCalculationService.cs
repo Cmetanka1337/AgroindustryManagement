@@ -85,8 +85,13 @@ public class AGCalculationService : IAGCalculationService
             return -1;
         }
         var concreteMachine=_databaseService.GetMachineByMachineType(machineType);
-        return concreteMachine.FuelConsumption * areaInHectares;
+        
+        if (concreteMachine == null) 
+        {
+            return -1;
+        }
 
+        return concreteMachine.FuelConsumption * areaInHectares;
     }
 
     public int CalculateRequiredWorkers(CultureType cropType, double areaInHectares)
@@ -100,7 +105,7 @@ public class AGCalculationService : IAGCalculationService
 
         if (resource == null)
         {
-            throw new KeyNotFoundException($"No resource found for crop type: {cropType}");
+            return -1;
         }
 
         return (int)Math.Ceiling(resource.WorkerPerHectare * areaInHectares);

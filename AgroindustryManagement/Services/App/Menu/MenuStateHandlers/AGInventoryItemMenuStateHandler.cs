@@ -29,7 +29,6 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
                 break;
             case MenuOptions.InventoryItemOptions.AddInventoryItem:
                 AddInventoryItem();
-                
                 break;
             case MenuOptions.InventoryItemOptions.Back:
                 app.SetMenuState(AGMenuState.MainMenuState);
