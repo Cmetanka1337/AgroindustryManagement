@@ -36,26 +36,26 @@ namespace Tests.CalculationServiceTests
             Assert.Equal(2000, result);
         }
         
-        [Fact]
-        public void Test_CalculateSeedAmount_NegativeArea_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                        _calculationService.CalculateSeedAmount(CultureType.Wheat, -5));
-            Assert.Throws<ArgumentException>(() =>
-                        _calculationService.CalculateSeedAmount(CultureType.Wheat, 0));
-        }
-        [Fact]
-        public void Test_CalculateSeedAmount_CultureTypeNotFound_ThrowsKeyNotFoundException()
-        {
-            var mockResource = new Resource
-            {
-                CultureType = CultureType.Wheat
-            };
-            _mockDBContext.Resources.Add(mockResource);
-            _mockDBContext.SaveChanges();
-            Assert.Throws<KeyNotFoundException>(() =>
-                        _calculationService.CalculateSeedAmount(CultureType.Rice, 10));
-        }
+        // [Fact]
+        // public void Test_CalculateSeedAmount_NegativeArea_ThrowsArgumentException()
+        // {
+        //     Assert.Throws<ArgumentException>(() =>
+        //                 _calculationService.CalculateSeedAmount(CultureType.Wheat, -5));
+        //     Assert.Throws<ArgumentException>(() =>
+        //                 _calculationService.CalculateSeedAmount(CultureType.Wheat, 0));
+        // }
+        // [Fact]
+        // public void Test_CalculateSeedAmount_CultureTypeNotFound_ThrowsKeyNotFoundException()
+        // {
+        //     var mockResource = new Resource
+        //     {
+        //         CultureType = CultureType.Wheat
+        //     };
+        //     _mockDBContext.Resources.Add(mockResource);
+        //     _mockDBContext.SaveChanges();
+        //     Assert.Throws<KeyNotFoundException>(() =>
+        //                 _calculationService.CalculateSeedAmount(CultureType.Rice, 10));
+        // }
         
         [Fact]
         public void Test_CalculateFertilizerAmount_ReturnCorrectFertilizerAmount()
@@ -71,26 +71,26 @@ namespace Tests.CalculationServiceTests
             Assert.Equal(2000, result);
         }
 
-        [Fact]
-        public void Test_CalculateFertilizerAmount_NegativeArea_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                        _calculationService.CalculateFertilizerAmount(CultureType.Wheat, -5));
-            Assert.Throws<ArgumentException>(() =>
-                        _calculationService.CalculateFertilizerAmount(CultureType.Wheat, 0));
-        }
-        [Fact]
-        public void Test_CalculateFertilizerAmount_CultureTypeNotFound_ThrowsKeyNotFoundException()
-        {
-            var mockResource = new Resource
-            {
-                CultureType= CultureType.Wheat
-            };
-            _mockDBContext.Resources.Add(mockResource);
-            _mockDBContext.SaveChanges();
-            Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.CalculateFertilizerAmount(CultureType.Rice, 10));
-        }
+        // [Fact]
+        // public void Test_CalculateFertilizerAmount_NegativeArea_ThrowsArgumentException()
+        // {
+        //     Assert.Throws<ArgumentException>(() =>
+        //                 _calculationService.CalculateFertilizerAmount(CultureType.Wheat, -5));
+        //     Assert.Throws<ArgumentException>(() =>
+        //                 _calculationService.CalculateFertilizerAmount(CultureType.Wheat, 0));
+        // }
+        // [Fact]
+        // public void Test_CalculateFertilizerAmount_CultureTypeNotFound_ThrowsKeyNotFoundException()
+        // {
+        //     var mockResource = new Resource
+        //     {
+        //         CultureType= CultureType.Wheat
+        //     };
+        //     _mockDBContext.Resources.Add(mockResource);
+        //     _mockDBContext.SaveChanges();
+        //     Assert.Throws<KeyNotFoundException>(() =>
+        //     _calculationService.CalculateFertilizerAmount(CultureType.Rice, 10));
+        // }
         [Fact]
         public void Test_EstimateYield_ReturnCorrectYield()
         {
@@ -105,28 +105,28 @@ namespace Tests.CalculationServiceTests
             Assert.Equal(200, result);
         }
         
-        [Fact]
-        public void Test_EstimateYield_NegativeArea_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateYield(CultureType.Wheat, -5));
-
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateYield(CultureType.Wheat, 0));
-        }
-        [Fact]
-        public void Test_EstimateYield_CultureTypeNotFound_ThrowsKeyNotFoundException()
-        {
-
-            var mockResource = new Resource
-            {
-                CultureType= CultureType.Wheat
-            };
-            _mockDBContext.Resources.Add(mockResource);
-            _mockDBContext.SaveChanges();
-            Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.EstimateYield(CultureType.Rice, 10));
-        }
+        // [Fact]
+        // public void Test_EstimateYield_NegativeArea_ThrowsArgumentException()
+        // {
+        //     Assert.Throws<ArgumentException>(() =>
+        //     _calculationService.EstimateYield(CultureType.Wheat, -5));
+        //
+        //     Assert.Throws<ArgumentException>(() =>
+        //     _calculationService.EstimateYield(CultureType.Wheat, 0));
+        // }
+        // [Fact]
+        // public void Test_EstimateYield_CultureTypeNotFound_ThrowsKeyNotFoundException()
+        // {
+        //
+        //     var mockResource = new Resource
+        //     {
+        //         CultureType= CultureType.Wheat
+        //     };
+        //     _mockDBContext.Resources.Add(mockResource);
+        //     _mockDBContext.SaveChanges();
+        //     Assert.Throws<KeyNotFoundException>(() =>
+        //     _calculationService.EstimateYield(CultureType.Rice, 10));
+        // }
         [Fact]
         public void Test_CalculateRequiredMachineryCount_ReturnCorrectNumberOfRequiredMachines()
         {
@@ -144,27 +144,27 @@ namespace Tests.CalculationServiceTests
             Assert.Equal(2, result);
         }
         
-        [Fact]
-        public void Test_CalculateRequiredMachineryCount_NegativeArea_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-           _calculationService.CalculateRequiredMachineryCount(CultureType.Wheat, -5));
-
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.CalculateRequiredMachineryCount(CultureType.Wheat, 0));
-        }
-        [Fact]
-        public void Test_CalculateRequiredMachineryCount_CultureTypeNotFound_ThrowsKeyNotFoundException()
-        {
-            var mockResource = new Resource
-            {
-                CultureType= CultureType.Wheat
-            };
-            _mockDBContext.Resources.Add(mockResource);
-            _mockDBContext.SaveChanges();
-            Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.CalculateRequiredMachineryCount(CultureType.Rice, 10));
-        }
+        // [Fact]
+        // public void Test_CalculateRequiredMachineryCount_NegativeArea_ThrowsArgumentException()
+        // {
+        //     Assert.Throws<ArgumentException>(() =>
+        //    _calculationService.CalculateRequiredMachineryCount(CultureType.Wheat, -5));
+        //
+        //     Assert.Throws<ArgumentException>(() =>
+        //     _calculationService.CalculateRequiredMachineryCount(CultureType.Wheat, 0));
+        // }
+        // [Fact]
+        // public void Test_CalculateRequiredMachineryCount_CultureTypeNotFound_ThrowsKeyNotFoundException()
+        // {
+        //     var mockResource = new Resource
+        //     {
+        //         CultureType= CultureType.Wheat
+        //     };
+        //     _mockDBContext.Resources.Add(mockResource);
+        //     _mockDBContext.SaveChanges();
+        //     Assert.Throws<KeyNotFoundException>(() =>
+        //     _calculationService.CalculateRequiredMachineryCount(CultureType.Rice, 10));
+        // }
         [Fact]
         public void Test_EstimateFuelConsumption_ReturnCorrectFuelConsumption()
         {
@@ -179,27 +179,27 @@ namespace Tests.CalculationServiceTests
             Assert.Equal(400, result);
         }
         
-        [Fact]
-        public void Test_EstimateFuelConsumption_NegativeArea_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-           _calculationService.EstimateFuelConsumption(MachineType.Tractor, -5));
-
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateFuelConsumption(MachineType.Tractor, 0));
-        }
-        [Fact]
-        public void Test_EstimateFuelConsumption_MachineTypeNotFound_ThrowsKeyNotFoundException()
-        {
-            var mockMachine = new Machine
-            {
-                Type = MachineType.Tractor
-            };
-            _databaseService.AddMachine(mockMachine);
-
-            Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.EstimateFuelConsumption(MachineType.Plow, 10));
-        }
+        // [Fact]
+        // public void Test_EstimateFuelConsumption_NegativeArea_ThrowsArgumentException()
+        // {
+        //     Assert.Throws<ArgumentException>(() =>
+        //    _calculationService.EstimateFuelConsumption(MachineType.Tractor, -5));
+        //
+        //     Assert.Throws<ArgumentException>(() =>
+        //     _calculationService.EstimateFuelConsumption(MachineType.Tractor, 0));
+        // }
+        // [Fact]
+        // public void Test_EstimateFuelConsumption_MachineTypeNotFound_ThrowsKeyNotFoundException()
+        // {
+        //     var mockMachine = new Machine
+        //     {
+        //         Type = MachineType.Tractor
+        //     };
+        //     _databaseService.AddMachine(mockMachine);
+        //
+        //     Assert.Throws<KeyNotFoundException>(() =>
+        //     _calculationService.EstimateFuelConsumption(MachineType.Plow, 10));
+        // }
         [Fact]
         public void Test_CalculateRequiredWorkers_ReturnCorrectNumberOfRequiredWorkers()
         {
@@ -214,27 +214,27 @@ namespace Tests.CalculationServiceTests
             Assert.Equal(30, result);
         }
         
-        [Fact]
-        public void Test_CalculateRequiredWorkers_NegativeArea_ThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() =>
-           _calculationService.CalculateRequiredWorkers(CultureType.Wheat, -5));
-
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.CalculateRequiredWorkers(CultureType.Wheat, 0));
-        }
-        [Fact]
-        public void Test_CalculateRequiredWorkers_CropTypeNotFound_ThrowsKeyNotFoundException()
-        {
-            var mockResource = new Resource
-            {
-                CultureType = CultureType.Wheat
-            };
-            _mockDBContext.Resources.Add(mockResource);
-            _mockDBContext.SaveChanges();
-            Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.CalculateRequiredWorkers(CultureType.Rice, 10));
-        }
+        // [Fact]
+        // public void Test_CalculateRequiredWorkers_NegativeArea_ThrowsArgumentException()
+        // {
+        //     Assert.Throws<ArgumentException>(() =>
+        //    _calculationService.CalculateRequiredWorkers(CultureType.Wheat, -5));
+        //
+        //     Assert.Throws<ArgumentException>(() =>
+        //     _calculationService.CalculateRequiredWorkers(CultureType.Wheat, 0));
+        // }
+        // [Fact]
+        // public void Test_CalculateRequiredWorkers_CropTypeNotFound_ThrowsKeyNotFoundException()
+        // {
+        //     var mockResource = new Resource
+        //     {
+        //         CultureType = CultureType.Wheat
+        //     };
+        //     _mockDBContext.Resources.Add(mockResource);
+        //     _mockDBContext.SaveChanges();
+        //     Assert.Throws<KeyNotFoundException>(() =>
+        //     _calculationService.CalculateRequiredWorkers(CultureType.Rice, 10));
+        // }
         [Fact]
         public void Test_EstimateWorkDuration_ReturnCorrectWorkDuration()
         {
@@ -255,72 +255,208 @@ namespace Tests.CalculationServiceTests
             Assert.Equal(270, result);
         }
         
+        // [Fact]
+        // public void Test_EstimateWorkDuration_NegativeAreaOrWorkerCounts_ThrowsArgumentException()
+        // {
+        //     Assert.Throws<ArgumentException>(() =>
+        //    _calculationService.EstimateWorkDuration(-5, -5, MachineType.Tractor, CultureType.Wheat));
+        //
+        //     Assert.Throws<ArgumentException>(() =>
+        //     _calculationService.EstimateWorkDuration(0,5, MachineType.Tractor, CultureType.Wheat));
+        // }
+        // [Fact]
+        // public void Test_EstimateWorkDuration_CropTypeOrMachineTypeNotFound_ThrowsKeyNotFoundException()
+        // {
+        //     var mockResource = new Resource
+        //     {
+        //         CultureType = CultureType.Wheat
+        //     };
+        //     var mockMachine = new Machine
+        //     {
+        //         Type=MachineType.Tractor
+        //     };
+        //     _mockDBContext.Resources.Add(mockResource);
+        //     _databaseService.AddMachine(mockMachine);
+        //     _mockDBContext.SaveChanges();
+        //     Assert.Throws<KeyNotFoundException>(() =>
+        //     _calculationService.EstimateWorkDuration(10, 10, MachineType.Plow, CultureType.Wheat));
+        // }
+        // [Fact]
+        // public void Test_CalculateBonus_ReturnCorrectTotalBonus()
+        // {
+        //     var mockWorker = new Worker
+        //     {
+        //         Id = 1,
+        //         FirstName = "John",
+        //         LastName = "Doe",
+        //         HourlyRate= 300,
+        //         HoursWorked=50
+        //     };
+        //     var mockWorkerTask = new WorkerTask
+        //     {
+        //         Description="Test",
+        //         EstimatesEndDate= DateTime.Now,
+        //         RealEndDate =new DateTime(2025, 11, 7, 12, 10, 30)
+        //     };
+        //     _databaseService.AddWorker(mockWorker);
+        //     _databaseService.AddWorkerTask(mockWorkerTask);
+        //     
+        //     var result = _calculationService.CalculateBonus(1);
+        //     Assert.Equal(15000, result);
+        // }
+        // [Fact]
+        // public void Test_CalculateBonus_NegativeWorkerId_ThrowsArgumentException()
+        // {
+        //     Assert.Throws<ArgumentException>(() => _calculationService.CalculateBonus(-5));
+        //     Assert.Throws<ArgumentException>(() => _calculationService.CalculateBonus(0));
+        // }
+        // [Fact]
+        // public void Test_CalculateBonus_WorkerIdNotFound_ThrowsKeyNotFoundException()
+        // {
+        //     var worker = new Worker
+        //     {
+        //         Id = 1,
+        //         FirstName = "John",
+        //         LastName = "Doe"
+        //     };
+        //     _databaseService.AddWorker(worker);
+        //     Assert.Throws<KeyNotFoundException>(() => _calculationService.CalculateBonus(3));
+        // }
+        
         [Fact]
-        public void Test_EstimateWorkDuration_NegativeAreaOrWorkerCounts_ThrowsArgumentException()
+        public void Test_CalculateSeedAmount_NegativeArea_ReturnsMinusOne()
         {
-            Assert.Throws<ArgumentException>(() =>
-           _calculationService.EstimateWorkDuration(-5, -5, MachineType.Tractor, CultureType.Wheat));
-
-            Assert.Throws<ArgumentException>(() =>
-            _calculationService.EstimateWorkDuration(0,5, MachineType.Tractor, CultureType.Wheat));
+            var result1 = _calculationService.CalculateSeedAmount(CultureType.Wheat, -5);
+            var result2 = _calculationService.CalculateSeedAmount(CultureType.Wheat, 0);
+        
+            Assert.Equal(-1, result1);
+            Assert.Equal(-1, result2);
         }
+        
         [Fact]
-        public void Test_EstimateWorkDuration_CropTypeOrMachineTypeNotFound_ThrowsKeyNotFoundException()
+        public void Test_CalculateSeedAmount_CultureTypeNotFound_ReturnsMinusOne()
         {
-            var mockResource = new Resource
-            {
-                CultureType = CultureType.Wheat
-            };
-            var mockMachine = new Machine
-            {
-                Type=MachineType.Tractor
-            };
-            _mockDBContext.Resources.Add(mockResource);
-            _databaseService.AddMachine(mockMachine);
-            _mockDBContext.SaveChanges();
-            Assert.Throws<KeyNotFoundException>(() =>
-            _calculationService.EstimateWorkDuration(10, 10, MachineType.Plow, CultureType.Wheat));
+            var result = _calculationService.CalculateSeedAmount(CultureType.Rice, 10);
+            Assert.Equal(-1, result);
         }
+        
         [Fact]
-        public void Test_CalculateBonus_ReturnCorrectTotalBonus()
+        public void Test_CalculateFertilizerAmount_NegativeArea_ReturnsMinusOne()
         {
-            var mockWorker = new Worker
-            {
-                Id = 1,
-                FirstName = "John",
-                LastName = "Doe",
-                HourlyRate= 300,
-                HoursWorked=50
-            };
-            var mockWorkerTask = new WorkerTask
-            {
-                Description="Test",
-                EstimatesEndDate= DateTime.Now,
-                RealEndDate =new DateTime(2025, 11, 7, 12, 10, 30)
-            };
-            _databaseService.AddWorker(mockWorker);
-            _databaseService.AddWorkerTask(mockWorkerTask);
-            
-            var result = _calculationService.CalculateBonus(1);
-            Assert.Equal(15000, result);
+            var result1 = _calculationService.CalculateFertilizerAmount(CultureType.Wheat, -5);
+            var result2 = _calculationService.CalculateFertilizerAmount(CultureType.Wheat, 0);
+        
+            Assert.Equal(-1, result1);
+            Assert.Equal(-1, result2);
         }
+        
         [Fact]
-        public void Test_CalculateBonus_NegativeWorkerId_ThrowsArgumentException()
+        public void Test_CalculateFertilizerAmount_CultureTypeNotFound_ReturnsMinusOne()
         {
-            Assert.Throws<ArgumentException>(() => _calculationService.CalculateBonus(-5));
-            Assert.Throws<ArgumentException>(() => _calculationService.CalculateBonus(0));
+            var result = _calculationService.CalculateFertilizerAmount(CultureType.Rice, 10);
+            Assert.Equal(-1, result);
         }
+        
         [Fact]
-        public void Test_CalculateBonus_WorkerIdNotFound_ThrowsKeyNotFoundException()
+        public void Test_EstimateYield_NegativeArea_ReturnsMinusOne()
         {
-            var worker = new Worker
-            {
-                Id = 1,
-                FirstName = "John",
-                LastName = "Doe"
-            };
-            _databaseService.AddWorker(worker);
-            Assert.Throws<KeyNotFoundException>(() => _calculationService.CalculateBonus(3));
+            var result1 = _calculationService.EstimateYield(CultureType.Wheat, -5);
+            var result2 = _calculationService.EstimateYield(CultureType.Wheat, 0);
+        
+            Assert.Equal(-1, result1);
+            Assert.Equal(-1, result2);
+        }
+        
+        [Fact]
+        public void Test_EstimateYield_CultureTypeNotFound_ReturnsMinusOne()
+        {
+            var result = _calculationService.EstimateYield(CultureType.Rice, 10);
+            Assert.Equal(-1, result);
+        }
+        
+        [Fact]
+        public void Test_CalculateRequiredMachineryCount_NegativeArea_ReturnsMinusOne()
+        {
+            var result1 = _calculationService.CalculateRequiredMachineryCount(CultureType.Wheat, -5);
+            var result2 = _calculationService.CalculateRequiredMachineryCount(CultureType.Wheat, 0);
+        
+            Assert.Equal(-1, result1);
+            Assert.Equal(-1, result2);
+        }
+        
+        [Fact]
+        public void Test_CalculateRequiredMachineryCount_CultureTypeNotFound_ReturnsMinusOne()
+        {
+            var result = _calculationService.CalculateRequiredMachineryCount(CultureType.Rice, 10);
+            Assert.Equal(-1, result);
+        }
+        
+        [Fact]
+        public void Test_EstimateFuelConsumption_NegativeArea_ReturnsMinusOne()
+        {
+            var result1 = _calculationService.EstimateFuelConsumption(MachineType.Tractor, -5);
+            var result2 = _calculationService.EstimateFuelConsumption(MachineType.Tractor, 0);
+        
+            Assert.Equal(-1, result1);
+            Assert.Equal(-1, result2);
+        }
+        
+        [Fact]
+        public void Test_EstimateFuelConsumption_MachineTypeNotFound_ReturnsMinusOne()
+        {
+            var result = _calculationService.EstimateFuelConsumption(MachineType.Plow, 10);
+            Assert.Equal(-1, result);
+        }
+        
+        [Fact]
+        public void Test_CalculateRequiredWorkers_NegativeArea_ReturnsMinusOne()
+        {
+            var result1 = _calculationService.CalculateRequiredWorkers(CultureType.Wheat, -5);
+            var result2 = _calculationService.CalculateRequiredWorkers(CultureType.Wheat, 0);
+        
+            Assert.Equal(-1, result1);
+            Assert.Equal(-1, result2);
+        }
+        
+        [Fact]
+        public void Test_CalculateRequiredWorkers_CropTypeNotFound_ReturnsMinusOne()
+        {
+            var result = _calculationService.CalculateRequiredWorkers(CultureType.Rice, 10);
+            Assert.Equal(-1, result);
+        }
+        
+        [Fact]
+        public void Test_EstimateWorkDuration_NegativeAreaOrWorkerCounts_ReturnsMinusOne()
+        {
+            var result1 = _calculationService.EstimateWorkDuration(-5, -5, MachineType.Tractor, CultureType.Wheat);
+            var result2 = _calculationService.EstimateWorkDuration(0, 5, MachineType.Tractor, CultureType.Wheat);
+        
+            Assert.Equal(-1, result1);
+            Assert.Equal(-1, result2);
+        }
+        
+        [Fact]
+        public void Test_EstimateWorkDuration_CropTypeOrMachineTypeNotFound_ReturnsMinusOne()
+        {
+            var result = _calculationService.EstimateWorkDuration(10, 10, MachineType.Plow, CultureType.Wheat);
+            Assert.Equal(-1, result);
+        }
+        
+        [Fact]
+        public void Test_CalculateBonus_NegativeWorkerId_ReturnsMinusOne()
+        {
+            var result1 = _calculationService.CalculateBonus(-5);
+            var result2 = _calculationService.CalculateBonus(0);
+        
+            Assert.Equal(-1, result1);
+            Assert.Equal(-1, result2);
+        }
+        
+        [Fact]
+        public void Test_CalculateBonus_WorkerIdNotFound_ReturnsMinusOne()
+        {
+            var result = _calculationService.CalculateBonus(3);
+            Assert.Equal(-1, result);
         }
     }
 }

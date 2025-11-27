@@ -29,7 +29,6 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
                 break;
             case MenuOptions.InventoryItemOptions.AddInventoryItem:
                 AddInventoryItem();
-                
                 break;
             case MenuOptions.InventoryItemOptions.Back:
                 app.SetMenuState(AGMenuState.MainMenuState);
@@ -40,7 +39,13 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
     private void DisplayInventoryItem()
     {
         var item = App.DatabaseService.GetInventoryItemById(GetInventoryItemId());
+        if (item == null)
+        {
+            Console.WriteLine("Inventory Item not found.");
+            return;
+        }
         App.ViewService.DisplayInventoryItemDetails(item);
+
     }
     
     private void DisplayAllInventoryItems()
@@ -53,6 +58,12 @@ public class AGInventoryItemMenuStateHandler: IAGMenuStateHandler
         DisplayAllInventoryItems();
         var id = GetInventoryItemId();
         var existingItem = App.DatabaseService.GetInventoryItemById(id);
+        if (existingItem == null)
+        {
+            Console.WriteLine("Inventory Item not found.");
+            return;
+        }
+        
         var updatedItem = App.DataCollector.EditData(existingItem);
         App.DatabaseService.UpdateInventoryItem(updatedItem);
     }

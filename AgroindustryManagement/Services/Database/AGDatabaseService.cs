@@ -10,20 +10,9 @@ public class AGDatabaseService : IAGDatabaseService
     {
         _context = context;
     }
-    public Field GetFieldById(int fieldId)
+    public Field? GetFieldById(int fieldId)
     {
-        if (fieldId <= 0)
-        {
-            throw new ArgumentException("Field ID must be a positive integer.", nameof(fieldId));
-        }
-        var field = _context.Fields.FirstOrDefault(field => field.Id == fieldId);
-
-        if (field == null)
-        {
-            throw new KeyNotFoundException($"Field with ID {fieldId} not found.");
-        }
-
-        return field;
+        return fieldId <= 0 ? null : _context.Fields.FirstOrDefault(field => field.Id == fieldId);
     }
 
     public IEnumerable<Field> GetAllFields()
@@ -39,7 +28,6 @@ public class AGDatabaseService : IAGDatabaseService
 
     public void AddField(Field field)
     {
-        // test this
         if (_context.Fields.FirstOrDefault(dbField => dbField.Id == field.Id) != null) 
             return;
         
@@ -53,7 +41,7 @@ public class AGDatabaseService : IAGDatabaseService
 
         if (existingField == null)
         {
-            throw new KeyNotFoundException($"Field with ID {field.Id} not found.");
+            return;
         }
         existingField.Culture = field.Culture;
         existingField.Area = field.Area;
@@ -69,34 +57,23 @@ public class AGDatabaseService : IAGDatabaseService
     {
         if (fieldId <= 0)
         {
-            throw new ArgumentException("Field ID must be a positive integer.", nameof(fieldId));
+            return;
         }
 
         var field = _context.Fields.FirstOrDefault(dbField => dbField.Id == fieldId);
 
         if (field == null)
         {
-            throw new KeyNotFoundException($"Field with ID {fieldId} not found.");
+            return;
         }
 
         _context.Fields.Remove(field);
         _context.SaveChanges();
     }
 
-    public Worker GetWorkerById(int workerId)
+    public Worker? GetWorkerById(int workerId)
     {
-        if (workerId <= 0)
-        {
-            throw new ArgumentException("Invalid id", nameof(workerId));
-        }
-        
-        var worker = _context.Workers.FirstOrDefault(dbWorker => dbWorker.Id == workerId);
-        if (worker == null)
-        {
-            throw new KeyNotFoundException("Worker with such id is not found");
-        }
-        
-        return worker;
+        return workerId <= 0 ? null : _context.Workers.FirstOrDefault(dbWorker => dbWorker.Id == workerId);
     }
 
     public IEnumerable<Worker> GetAllWorkers()
@@ -120,7 +97,7 @@ public class AGDatabaseService : IAGDatabaseService
         var existingWorker = _context.Workers.FirstOrDefault(dbWorker => dbWorker.Id == worker.Id);
         if (existingWorker == null)
         {
-            throw new KeyNotFoundException("Worker is not found");
+            return;
         }
         
         existingWorker.HoursWorked = worker.HoursWorked;
@@ -138,33 +115,22 @@ public class AGDatabaseService : IAGDatabaseService
     {
         if (workerId <= 0)
         {
-            throw new ArgumentException("Worker id must be positive", nameof(workerId));
+            return;
         }
         
         var workerExist = _context.Workers.FirstOrDefault(dbWorker => dbWorker.Id == workerId);
         if (workerExist == null)
         {
-            throw new KeyNotFoundException("Such worker is not found");
+            return;
         }
         
         _context.Workers.Remove(workerExist);
         _context.SaveChanges();
     }
 
-    public Machine GetMachineById(int machineId)
+    public Machine? GetMachineById(int machineId)
     {
-        if (machineId <= 0)
-        {
-            throw new ArgumentException("Id must be positive", nameof(machineId));
-        }
-        
-        var machineExist = _context.Machines.FirstOrDefault(dbMachine => dbMachine.Id == machineId);
-        if (machineExist == null)
-        {
-            throw new KeyNotFoundException("Machine is not found");
-        }
-        
-        return machineExist;
+        return machineId <= 0 ? null : _context.Machines.FirstOrDefault(dbMachine => dbMachine.Id == machineId);
     }
 
     public IEnumerable<Machine> GetAllMachines()
@@ -185,8 +151,8 @@ public class AGDatabaseService : IAGDatabaseService
     {
         var existingMachine = _context.Machines.FirstOrDefault(dbMachine => dbMachine.Id == machine.Id);
         if(existingMachine == null)
-        { 
-            throw new KeyNotFoundException("Such machine is not found"); 
+        {
+            return;
         }
         
         existingMachine.Field = machine.Field;
@@ -203,33 +169,22 @@ public class AGDatabaseService : IAGDatabaseService
     {
         if (machineId <= 0)
         {
-            throw new ArgumentException("Id must be positive", nameof(machineId));
+            return;
         }
         
         var machine = _context.Machines.FirstOrDefault(dbMachine => dbMachine.Id == machineId);
         if (machine == null)
         {
-            throw new KeyNotFoundException("Such machine is not found");
+            return;
         }
         
         _context.Machines.Remove(machine);
         _context.SaveChanges();
     }
 
-    public InventoryItem GetInventoryItemById(int itemId)
+    public InventoryItem? GetInventoryItemById(int itemId)
     {
-        if(itemId <= 0)
-        { 
-            throw new ArgumentException("Id must be positive",nameof(itemId)); 
-        }
-        
-        var item = _context.InventoryItems.FirstOrDefault(dbInventoryItem => dbInventoryItem.Id == itemId);
-        if(item == null)
-        {
-            throw new KeyNotFoundException("Such item is not found");
-        }
-        
-        return item;
+        return itemId <= 0 ? null : _context.InventoryItems.FirstOrDefault(dbInventoryItem => dbInventoryItem.Id == itemId);
     }
 
     public IEnumerable<InventoryItem> GetAllInventoryItems()
@@ -252,7 +207,7 @@ public class AGDatabaseService : IAGDatabaseService
         var existingItem=_context.InventoryItems.FirstOrDefault(dbInventoryItem => dbInventoryItem.Id == item.Id);
         if (existingItem == null)
         {
-            throw new KeyNotFoundException("There is no such item");
+            return;
         }
         
         existingItem.Name = item.Name;
@@ -273,27 +228,16 @@ public class AGDatabaseService : IAGDatabaseService
         var item= _context.InventoryItems.FirstOrDefault(dbInventoryItem => dbInventoryItem.Id == itemId);
         if (item == null)
         {
-            throw new KeyNotFoundException("There is no such item");
+            return;
         }
         
         _context.InventoryItems.Remove(item);
         _context.SaveChanges();
     }
 
-    public WorkerTask GetWorkerTaskById(int taskId)
+    public WorkerTask? GetWorkerTaskById(int taskId)
     {
-        if (taskId <= 0)
-        {
-            throw new ArgumentException("ID must be positive", nameof(taskId));
-        }
-        
-        var task = _context.WorkerTasks.FirstOrDefault(dbTask => dbTask.Id == taskId);
-        if (task == null)
-        {
-            throw new KeyNotFoundException("There is no such task");
-        }
-        
-        return task;
+        return taskId <= 0 ? null : _context.WorkerTasks.FirstOrDefault(dbTask => dbTask.Id == taskId);;
     }
 
     public IEnumerable<WorkerTask> GetAllWorkerTasks()
@@ -316,7 +260,7 @@ public class AGDatabaseService : IAGDatabaseService
         var existingWorkerTask = _context.WorkerTasks.FirstOrDefault(dbTask => dbTask.Id == task.Id);
         if (existingWorkerTask == null)
         {
-            throw new KeyNotFoundException("There is no such task");
+            return;
         }
         
         existingWorkerTask.Worker = task.Worker;
@@ -339,27 +283,16 @@ public class AGDatabaseService : IAGDatabaseService
         var task= _context.WorkerTasks.FirstOrDefault(dbTask => dbTask.Id == taskId);
         if (task == null)
         {
-            throw new KeyNotFoundException("There is no such task"); 
+            return;
         }
         
         _context.WorkerTasks.Remove(task);
         _context.SaveChanges();   
     }
     
-    public Resource GetResourceById(int resourceId)
+    public Resource? GetResourceById(int resourceId)
     {
-        if (resourceId <= 0)
-        {
-            throw new ArgumentException("Id must be positive", nameof(resourceId));
-        }
-        
-        var resource = _context.Resources.FirstOrDefault(dbResource => dbResource.Id == resourceId);
-        if (resource == null)
-        {
-            throw new KeyNotFoundException("Resource with such id is not found");
-        }
-        
-        return resource;
+        return resourceId <= 0 ? null : _context.Resources.FirstOrDefault(dbResource => dbResource.Id == resourceId);
     }
     
     public void AddResource(Resource resource)
@@ -376,7 +309,7 @@ public class AGDatabaseService : IAGDatabaseService
         var existingResource = _context.Resources.FirstOrDefault(dbResource => dbResource.Id == resource.Id);
         if (existingResource == null)
         {
-            throw new KeyNotFoundException("Resource is not found");
+            return;
         }
         
         existingResource.CultureType = resource.CultureType;
@@ -394,13 +327,13 @@ public class AGDatabaseService : IAGDatabaseService
     {
         if (resourceId <= 0)
         {
-            throw new ArgumentException("Id must be positive", nameof(resourceId));
+            return;
         }
         
         var resource = _context.Resources.FirstOrDefault(dbResource => dbResource.Id == resourceId);
         if (resource == null)
         {
-            throw new KeyNotFoundException("Such resource is not found");
+            return;
         }
         
         _context.Resources.Remove(resource);
@@ -413,20 +346,9 @@ public class AGDatabaseService : IAGDatabaseService
         return resources.Count == 0 ? Enumerable.Empty<Resource>() : resources;
     }
     
-    public Warehouse GetWarehouseById(int warehouseId)
+    public Warehouse? GetWarehouseById(int warehouseId)
     {
-        if (warehouseId <= 0)
-        {
-            throw new ArgumentException("Id must be positive", nameof(warehouseId));
-        }
-        
-        var warehouse = _context.Warehouses.FirstOrDefault(dbWarehouse => dbWarehouse.Id == warehouseId);
-        if (warehouse == null)
-        {
-            throw new KeyNotFoundException("Warehouse with such id is not found");
-        }
-
-        return warehouse;
+        return warehouseId <= 0 ? null : _context.Warehouses.FirstOrDefault(dbWarehouse => dbWarehouse.Id == warehouseId);
     }
     
     public IEnumerable<Warehouse> GetAllWarehouses()
@@ -449,7 +371,7 @@ public class AGDatabaseService : IAGDatabaseService
         var existingWarehouse = _context.Warehouses.FirstOrDefault(dbWarehouse => dbWarehouse.Id == warehouse.Id);
         if (existingWarehouse == null)
         {
-            throw new KeyNotFoundException("Warehouse is not found");
+            return;
         }
         
         existingWarehouse.InventoryItems = warehouse.InventoryItems;
@@ -467,42 +389,20 @@ public class AGDatabaseService : IAGDatabaseService
         var warehouse = _context.Warehouses.FirstOrDefault(dbWarehouse => dbWarehouse.Id == warehouseId);
         if (warehouse == null)
         {
-            throw new KeyNotFoundException("Such warehouse is not found");
+            return;
         }
         
         _context.Warehouses.Remove(warehouse);
         _context.SaveChanges();
     }
     
-    public Resource GetResourceByCultureType(CultureType cultureType)
+    public Resource? GetResourceByCultureType(CultureType cultureType)
     {
-        if (!Enum.IsDefined(typeof(CultureType), cultureType))
-        {
-            throw new ArgumentException("Invalid culture type.", nameof(cultureType));
-        }
-        
-        var resource = _context.Resources.FirstOrDefault(resource => resource.CultureType == cultureType);
-        if (resource == null)
-        {
-            throw new KeyNotFoundException($"Resource for culture type {cultureType} not found.");
-        }
-        
-        return resource;
+        return _context.Resources.FirstOrDefault(resource => resource.CultureType == cultureType);
     }
-    public Machine GetMachineByMachineType(MachineType machineType)
+    public Machine? GetMachineByMachineType(MachineType machineType)
     {
-        if(!Enum.IsDefined(typeof(MachineType), machineType))
-        {
-            throw new ArgumentException("Invalid machine type.", nameof(machineType));
-        }
-        
-        var machine= _context.Machines.FirstOrDefault(machine => machine.Type == machineType);
-        if(machine == null)
-        {
-            throw new KeyNotFoundException($"Machine for machine type {machineType} not found.");
-        }
-        
-        return machine;
+        return _context.Machines.FirstOrDefault(machine => machine.Type == machineType);
     }
     public IEnumerable<InventoryItem> GetCriticalInventoryItems()
     {
@@ -514,7 +414,7 @@ public class AGDatabaseService : IAGDatabaseService
     {
         if (workerId <= 0)
         {
-            throw new ArgumentException("Id must be positive", nameof(workerId));
+            return Enumerable.Empty<WorkerTask>();
         }
         var tasksById = _context.WorkerTasks.Where(workerTask => workerTask.Worker.Id == workerId).ToList();
 

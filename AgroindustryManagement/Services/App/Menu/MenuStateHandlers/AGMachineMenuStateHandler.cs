@@ -38,8 +38,13 @@ public class AGMachineMenuStateHandler: IAGMenuStateHandler
     
     private void DisplayMachine()
     {
-        // crashed here
         var machine = App.DatabaseService.GetMachineById(GetMachineId());
+        if (machine == null)
+        {
+            Console.WriteLine("Machine not found.");
+            return;
+        }
+        
         App.ViewService.DisplayMachineDetails(machine);
     }
     
@@ -53,6 +58,12 @@ public class AGMachineMenuStateHandler: IAGMenuStateHandler
         DisplayAllMachines();
         var id = GetMachineId();
         var existingMachine = App.DatabaseService.GetMachineById(id);
+        if (existingMachine == null)
+        {
+            Console.WriteLine("Machine not found.");
+            return;
+        }
+        
         var updatedMachine = App.DataCollector.EditData(existingMachine);
         App.DatabaseService.UpdateMachine(updatedMachine);
     }

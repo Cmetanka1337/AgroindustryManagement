@@ -38,6 +38,12 @@ public class AGResourceStateMenuHandler: IAGMenuStateHandler
     private void DisplayResource()
     {
         var resource = App.DatabaseService.GetResourceById(GetResourceId());
+        if (resource == null)
+        {
+            Console.WriteLine("Resource not found.");
+            return;
+        }
+        
         App.ViewService.DisplayResourceDetails(resource);
     }
     
@@ -57,6 +63,12 @@ public class AGResourceStateMenuHandler: IAGMenuStateHandler
         DisplayAllResources();
         var id = GetResourceId();
         var resource = App.DatabaseService.GetResourceById(id);
+        if (resource == null)
+        {
+            Console.WriteLine("Resource not found.");
+            return;
+        }
+        
         App.ViewService.DisplayResourceDetails(resource);
         var updatedResource = App.DataCollector.EditData(resource);
         App.DatabaseService.EditResource(updatedResource);

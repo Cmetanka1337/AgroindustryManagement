@@ -313,7 +313,7 @@ using AgroindustryManagement.Models;
         public void DisplayAllResources(IEnumerable<Resource> resources)
         {
             Console.WriteLine("==================================================================================================================");
-            Console.WriteLine("| ID   | Culture Type       | Seed/Ha | Fertilizer/Ha | Worker/Ha | Work Durality/Ha | Yield   | Machines Count |");
+            Console.WriteLine("| ID   | Culture Type       | Seed/Ha | Fertilizer/Ha | Worker/Ha | Work Duration/Ha | Yield   | Machines Count |");
             Console.WriteLine("==================================================================================================================");
         
             foreach (var resource in resources)
